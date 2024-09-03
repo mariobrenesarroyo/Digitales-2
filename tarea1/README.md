@@ -18,6 +18,18 @@ Estudiante de la Universidad de Costa Rica (UCR), Segundo Semestre 2024.
 - **VVP**: Simulador de Verilog.
 - **GTKWave**: Visualizador de formas de onda.
 
+## Pruebas del sistema
+1. Prueba #1, funcionamiento normal básico. Llegada de un vehículo, ingreso del pin correcto 
+y apertura de puerta, sensor de fin de entrada y cierre de compuerta. 
+2. Prueba #2, ingreso de pin incorrecto menos de 3 veces. Llegada de un vehículo, ingreso de 
+pin incorrecto (una o dos veces), puerta permanece cerrada.  Ingreso de pin correcto, 
+funcionamiento normal básico.  Revisión de contador de intentos incorrectos. 
+3. Prueba #3, ingreso de pin incorrecto 3 o más veces. Revisión de alarma de pin incorrecto.  
+Revisión de contador de intentos incorrectos.  Ingreso de pin correcto, funcionamiento 
+normal básico. Revisión de limpieza de contadores y alarmas. 
+4. Prueba #4, alarma de bloqueo. Ambos sensores encienden al mismo tiempo, encendido de 
+alarma de bloqueo, ingreso de clave incorrecta, bloqueo permanece.  Ingreso de clave 
+correcta, desbloqueo.  Funcionamiento normal básico.
 ## Uso del Makefile
 
 El Makefile incluido en este proyecto permite compilar y ejecutar los archivos Verilog de manera sencilla. A continuación se describen los comandos disponibles:
@@ -44,6 +56,8 @@ Este comando elimina los archivos de salida generados (a_tb, b_tb, c_tb, acceso_
 
 
 
+### Por favor seguir este orden cuando haga make run y esté dentro de GTKwave
 
+![alt text](image.png)
 
 
