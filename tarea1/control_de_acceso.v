@@ -1,11 +1,10 @@
 module control_acceso (
-    input llegado_vehiculo, paso_vehiculo, tercer_intento, boton_reset, clk, reset,
-    input [15:0] clave_ingresada,
+    input wire llegado_vehiculo, paso_vehiculo, tercer_intento, boton_reset, clk, reset,
+    input wire [15:0] clave_ingresada,
     output reg abriendo_compuerta, cerrando_compuerta, alarm_bloqueo, alarm_pin_incorrecto
 );
 
 reg [1:0] EstPresente, ProxEstado, contador_intentos;
-reg alarm_pin_latch; // Nuevo latch para mantener la alarma activa
 
 // ASIGNACIÓN DE ESTADOS Y PARÁMETRO DE CLAVE CORRECTA
 parameter A = 2'b00;
@@ -19,22 +18,14 @@ always @(posedge clk or posedge reset) begin
     if (reset) begin
         EstPresente <= A;
         contador_intentos <= 2'b00;
-        alarm_pin_latch <= 0;
-        alarm_pin_incorrecto <= 0;
-    end else begin
+
+    end else
         EstPresente <= ProxEstado;
-        if (ProxEstado == D && EstPresente == B) begin
-            alarm_pin_latch <= 1; // Activa el latch al entrar en el estado D desde B
-        end
-        if (ProxEstado == A) begin
-            alarm_pin_latch <= 0; // Resetea el latch al volver a A
-        end
-    end
+    
 end
 
 // Lógica de cálculo de próximo estado
 always @(*) begin
-    ProxEstado = EstPresente; // Asignación por defecto
     case (EstPresente)
         A: if (llegado_vehiculo) begin
                 ProxEstado = B;
@@ -45,7 +36,6 @@ always @(*) begin
             if (clave_ingresada == CLAVE_CORRECTA) begin
                 ProxEstado = C; 
                 contador_intentos = 2'b00;
-                alarm_pin_latch = 0; // Desactivar alarma si se ingresa la clave correcta
             end else begin
                 contador_intentos = contador_intentos + 1;
                 if (contador_intentos == 3) begin
@@ -54,16 +44,18 @@ always @(*) begin
             end
         end
 
-        C: case ({paso_vehiculo, llegado_vehiculo})
-            2'b10: ProxEstado = A;
-            2'b11: ProxEstado = D;
-            default: ProxEstado = C;
-        endcase
+        C: begin 
+            if (llegado_vehiculo == 1 && paso_vehiculo == 1)
+                ProxEstado = D;
+            else if (paso_vehiculo)
+                ProxEstado = A;
+            else if(~paso_vehiculo)
+             ProxEstado = C;
+        end
 
         D: if (boton_reset) begin
                 ProxEstado = A;
                 contador_intentos = 2'b00;
-                alarm_pin_latch = 0; // Reset de la alarma
             end
     endcase
 end
@@ -72,7 +64,7 @@ end
 always @(*) begin
     abriendo_compuerta = (EstPresente == B) && (clave_ingresada == CLAVE_CORRECTA);
     cerrando_compuerta = (EstPresente == C) && (paso_vehiculo && ~llegado_vehiculo);
-    alarm_pin_incorrecto = alarm_pin_latch; // Asignación a partir del latch
+    alarm_pin_incorrecto = (contador_intentos == 3);
     alarm_bloqueo = (EstPresente == D);
 end
 
