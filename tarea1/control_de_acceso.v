@@ -7,10 +7,10 @@ module control_acceso (
 reg [1:0] EstPresente, ProxEstado, contador_intentos;
 
 // ASIGNACIÓN DE ESTADOS Y PARÁMETRO DE CLAVE CORRECTA
-parameter A = 2'b00;
-parameter B = 2'b01;
-parameter C = 2'b10;
-parameter D = 2'b11;
+parameter A = 2'b00;    //esperando vehículo
+parameter B = 2'b01;    //intentando clave  
+parameter C = 2'b10;    //Pasando Vehículo
+parameter D = 2'b11;    //Estado de bloqueo
 parameter CLAVE_CORRECTA = 16'h1194;
 
 // Memoria de estados

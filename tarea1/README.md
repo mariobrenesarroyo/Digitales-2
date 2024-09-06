@@ -40,6 +40,7 @@ Para compilar los archivos Verilog y ejecutar la simulaci√≥n, utiliza el siguien
 
 ```bash
 make run
+```
 Este comando realiza las siguientes acciones:
 
 Compila los archivos control_de_acceso.v, tester.v y testbench.v.
@@ -50,7 +51,7 @@ Abre el archivo de resultados resultados.vcd con GTKWave para visualizar las se√
 ### Eliminar archivos sobrantes despues de haberlo ejecutado
 ```bash
 make clean
-
+```
 
 Este comando elimina los archivos de salida generados (a_tb, b_tb, c_tb, acceso_tb.vvp y resultado.vcd).
 
