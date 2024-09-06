@@ -11,7 +11,7 @@ parameter A = 2'b00;    //esperando vehículo
 parameter B = 2'b01;    //intentando clave  
 parameter C = 2'b10;    //Pasando Vehículo
 parameter D = 2'b11;    //Estado de bloqueo
-parameter CLAVE_CORRECTA = 16'h1194;
+parameter CLAVE_CORRECTA = 16'h2468; //clave por defecto
 
 // Memoria de estados
 always @(posedge clk or posedge reset) begin

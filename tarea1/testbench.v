@@ -38,6 +38,9 @@ module acceso_tb;
 
   );
 
+  defparam P0.CLAVE_CORRECTA = 16'h1194;    //nueva clave correcta en provador por mi carnet C11194
+  defparam U0.CLAVE_CORRECTA = 16'h1194;    //nueva clave correcta en  modulo top por C11194
+
   initial begin
     $dumpfile("resultados.vcd");
     $dumpvars(-1, U0);

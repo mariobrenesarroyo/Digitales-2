@@ -12,14 +12,14 @@ module provador_acceso (
 );
 
     // Definición de la clave correcta
-    parameter CLAVE_CORRECTA = 16'h1194;   // Clave correcta de pruebas
-    parameter CLAVE_POR_DEFECTO = 16'h2468; // Clave por defecto
+    parameter CLAVE_CORRECTA = 16'h2468;   // Clave correcta de pruebas por defecto
+    parameter CLAVE_CERO = 16'h0000; // Clave por inicial
 
     initial begin
         // Inicialización de señales
         clk = 0;
         reset = 0;
-        clave_ingresada = CLAVE_POR_DEFECTO;   // mi clave por defecto
+        clave_ingresada = CLAVE_CERO;   // mi clave por defecto
         paso_vehiculo = 0;
         boton_reset = 0;
         llegado_vehiculo = 0;
