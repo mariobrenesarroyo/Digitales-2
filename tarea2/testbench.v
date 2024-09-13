@@ -1,5 +1,5 @@
-`include "control_de_acceso.v"
-//`include "output_sintetizado.v"
+//`include "control_de_acceso.v"
+`include "sintetizado.v"
 `include "tester.v"
 
 
@@ -49,6 +49,7 @@ module acceso_tb;
     // Monitorización de todas las señales
     $monitor("clk=%b, reset=%b, llegado_vehiculo=%b, paso_vehiculo=%b, clave_ingresada=%h, boton_reset=%b, abriendo_compuerta=%b, cerrando_compuerta=%b, alarm_pin_incorrecto=%b, alarm_bloqueo=%b", 
              clk, reset, llegado_vehiculo, paso_vehiculo, clave_ingresada, boton_reset, abriendo_compuerta, cerrando_compuerta, alarm_pin_incorrecto, alarm_bloqueo);
-  end
+end
+
 
 endmodule
