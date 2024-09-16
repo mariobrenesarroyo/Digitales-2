@@ -5,13 +5,14 @@ module control_acceso (
 );
 
 reg [1:0] EstPresente, ProxEstado, contador_intentos;
+reg [15:0] CLAVE_CORRECTA = 16'h1194 ;
 
 // ASIGNACIÓN DE ESTADOS Y PARÁMETRO DE CLAVE CORRECTA
-parameter A = 2'b00;    //esperando vehículo
-parameter B = 2'b01;    //intentando clave  
-parameter C = 2'b10;    //Pasando Vehículo
-parameter D = 2'b11;    //Estado de bloqueo
-parameter CLAVE_CORRECTA = 16'h1194; //clave por defecto
+localparam A = 2'b00;    //esperando vehículo
+localparam B = 2'b01;    //intentando clave  
+localparam C = 2'b10;    //Pasando Vehículo
+localparam D = 2'b11;    //Estado de bloqueo
+
 
 // Memoria de estados
 always @(posedge clk or posedge reset) begin
