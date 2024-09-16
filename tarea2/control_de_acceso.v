@@ -1,4 +1,4 @@
-module control_acceso #(parameter CLAVE_CORRECTA = 16'h2468)(
+module control_acceso (
     input wire llegado_vehiculo, paso_vehiculo, tercer_intento, boton_reset, clk, reset,
     input wire [15:0] clave_ingresada,
     output reg abriendo_compuerta, cerrando_compuerta, alarm_bloqueo, alarm_pin_incorrecto
@@ -6,22 +6,22 @@ module control_acceso #(parameter CLAVE_CORRECTA = 16'h2468)(
 
 reg [1:0] EstPresente, ProxEstado, contador_intentos;
 
-// ASIGNACIÓN DE ESTADOS Y PARÁMETRO DE CLAVE CORRECTA
-parameter A = 2'b00;    //esperando vehículo
-parameter B = 2'b01;    //intentando clave  
-parameter C = 2'b10;    //Pasando Vehículo
-parameter D = 2'b11;    //Estado de bloqueo
+// Definir CLAVE_CORRECTA como constante
+localparam [15:0] CLAVE_CORRECTA = 16'h2468; // Clave correcta fija
 
+// ASIGNACIÓN DE ESTADOS
+parameter A = 2'b00;    // Esperando vehículo
+parameter B = 2'b01;    // Intentando clave  
+parameter C = 2'b10;    // Pasando Vehículo
+parameter D = 2'b11;    // Estado de bloqueo
 
 // Memoria de estados
 always @(posedge clk or posedge reset) begin
     if (reset) begin
         EstPresente <= A;
         contador_intentos <= 2'b00;
-
     end else
         EstPresente <= ProxEstado;
-    
 end
 
 // Lógica de cálculo de próximo estado
@@ -50,7 +50,7 @@ always @(*) begin
             else if (paso_vehiculo)
                 ProxEstado = A;
             else if(~paso_vehiculo)
-             ProxEstado = C;
+                ProxEstado = C;
         end
 
         D: if (boton_reset) begin
