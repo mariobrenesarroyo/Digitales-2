@@ -1,3 +1,4 @@
+//c11194
 module control_acceso (
     input wire llegado_vehiculo, paso_vehiculo, tercer_intento, boton_reset, clk, reset,
     input wire [15:0] clave_ingresada,
