@@ -2,7 +2,6 @@
 autoidx 550
 attribute \src "control_de_acceso.v:1.1-71.10"
 module \control_acceso
-  parameter \CLAVE_CORRECTA 16'0010010001101000
   parameter \A 2'00
   parameter \B 2'01
   parameter \C 2'10
@@ -89,8 +88,8 @@ module \control_acceso
     connect \Y $abc$512$new_n31
   end
   cell $_ORNOT_ $abc$512$auto$blifparse.cc:396:parse_blif$517
-    connect \A \clave_ingresada [2]
-    connect \B \clave_ingresada [3]
+    connect \A \clave_ingresada [3]
+    connect \B \clave_ingresada [2]
     connect \Y $abc$512$new_n32
   end
   cell $_ANDNOT_ $abc$512$auto$blifparse.cc:396:parse_blif$518
@@ -99,13 +98,13 @@ module \control_acceso
     connect \Y $abc$512$new_n33
   end
   cell $_ORNOT_ $abc$512$auto$blifparse.cc:396:parse_blif$519
-    connect \A \clave_ingresada [4]
-    connect \B \clave_ingresada [5]
+    connect \A \clave_ingresada [5]
+    connect \B \clave_ingresada [4]
     connect \Y $abc$512$new_n34
   end
   cell $_ORNOT_ $abc$512$auto$blifparse.cc:396:parse_blif$520
-    connect \A \clave_ingresada [7]
-    connect \B \clave_ingresada [6]
+    connect \A \clave_ingresada [6]
+    connect \B \clave_ingresada [7]
     connect \Y $abc$512$new_n35
   end
   cell $_OR_ $abc$512$auto$blifparse.cc:396:parse_blif$521
@@ -118,12 +117,12 @@ module \control_acceso
     connect \B $abc$512$new_n36
     connect \Y $abc$512$new_n37
   end
-  cell $_OR_ $abc$512$auto$blifparse.cc:396:parse_blif$523
+  cell $_ORNOT_ $abc$512$auto$blifparse.cc:396:parse_blif$523
     connect \A \clave_ingresada [9]
     connect \B \clave_ingresada [8]
     connect \Y $abc$512$new_n38
   end
-  cell $_ORNOT_ $abc$512$auto$blifparse.cc:396:parse_blif$524
+  cell $_OR_ $abc$512$auto$blifparse.cc:396:parse_blif$524
     connect \A \clave_ingresada [11]
     connect \B \clave_ingresada [10]
     connect \Y $abc$512$new_n39
@@ -134,8 +133,8 @@ module \control_acceso
     connect \Y $abc$512$new_n40
   end
   cell $_ORNOT_ $abc$512$auto$blifparse.cc:396:parse_blif$526
-    connect \A \clave_ingresada [12]
-    connect \B \clave_ingresada [13]
+    connect \A \clave_ingresada [13]
+    connect \B \clave_ingresada [12]
     connect \Y $abc$512$new_n41
   end
   cell $_OR_ $abc$512$auto$blifparse.cc:396:parse_blif$527
@@ -255,14 +254,14 @@ module \control_acceso
     connect \E $abc$512$auto$rtlil.cc:2489:ReduceOr$254
     connect \Q \ProxEstado [1]
   end
-  attribute \src "control_de_acceso.v:17.1-25.4"
+  attribute \src "control_de_acceso.v:19.1-25.4"
   cell $_DFF_PP0_ $auto$ff.cc:266:slice$472
     connect \C \clk
     connect \D \ProxEstado [0]
     connect \Q \EstPresente [0]
     connect \R \reset
   end
-  attribute \src "control_de_acceso.v:17.1-25.4"
+  attribute \src "control_de_acceso.v:19.1-25.4"
   cell $_DFF_PP0_ $auto$ff.cc:266:slice$473
     connect \C \clk
     connect \D \ProxEstado [1]

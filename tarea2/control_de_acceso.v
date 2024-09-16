@@ -7,7 +7,7 @@ module control_acceso (
 reg [1:0] EstPresente, ProxEstado, contador_intentos;
 
 // Definir CLAVE_CORRECTA como constante
-localparam [15:0] CLAVE_CORRECTA = 16'h2468; // Clave correcta fija
+localparam [15:0] CLAVE_CORRECTA = 16'h1194; // Clave correcta fija por numero de carnet c11194
 
 // ASIGNACIÓN DE ESTADOS
 parameter A = 2'b00;    // Esperando vehículo

@@ -78,16 +78,16 @@ module control_acceso(llegado_vehiculo, paso_vehiculo, tercer_intento, boton_res
   assign _02_ = ~(_01_ | boton_reset);
   assign _03_ = EstPresente[0] & ~(EstPresente[1]);
   assign _04_ = ~(clave_ingresada[1] | clave_ingresada[0]);
-  assign _05_ = clave_ingresada[2] | ~(clave_ingresada[3]);
+  assign _05_ = clave_ingresada[3] | ~(clave_ingresada[2]);
   assign _06_ = _04_ & ~(_05_);
-  assign _07_ = clave_ingresada[4] | ~(clave_ingresada[5]);
-  assign _08_ = clave_ingresada[7] | ~(clave_ingresada[6]);
+  assign _07_ = clave_ingresada[5] | ~(clave_ingresada[4]);
+  assign _08_ = clave_ingresada[6] | ~(clave_ingresada[7]);
   assign _09_ = _08_ | _07_;
   assign _10_ = _06_ & ~(_09_);
-  assign _11_ = clave_ingresada[9] | clave_ingresada[8];
-  assign _12_ = clave_ingresada[11] | ~(clave_ingresada[10]);
+  assign _11_ = clave_ingresada[9] | ~(clave_ingresada[8]);
+  assign _12_ = clave_ingresada[11] | clave_ingresada[10];
   assign _13_ = _12_ | _11_;
-  assign _14_ = clave_ingresada[12] | ~(clave_ingresada[13]);
+  assign _14_ = clave_ingresada[13] | ~(clave_ingresada[12]);
   assign _15_ = clave_ingresada[15] | clave_ingresada[14];
   assign _16_ = _15_ | _14_;
   assign _17_ = _16_ | _13_;
@@ -115,11 +115,11 @@ module control_acceso(llegado_vehiculo, paso_vehiculo, tercer_intento, boton_res
   (* src = "control_de_acceso.v:28.1-61.4" *)
   always @*
     if (!_00_) ProxEstado[1] = _30_[1];
-  (* src = "control_de_acceso.v:17.1-25.4" *)
+  (* src = "control_de_acceso.v:19.1-25.4" *)
   always @(posedge clk, posedge reset)
     if (reset) EstPresente[0] <= 1'h0;
     else EstPresente[0] <= ProxEstado[0];
-  (* src = "control_de_acceso.v:17.1-25.4" *)
+  (* src = "control_de_acceso.v:19.1-25.4" *)
   always @(posedge clk, posedge reset)
     if (reset) EstPresente[1] <= 1'h0;
     else EstPresente[1] <= ProxEstado[1];
