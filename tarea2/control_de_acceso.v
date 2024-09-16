@@ -31,6 +31,8 @@ always @(*) begin
         A: if (llegado_vehiculo) begin
                 ProxEstado = B;
                 contador_intentos = 2'b00;
+            else
+                ProxEstado = A;
             end
 
         B: begin
