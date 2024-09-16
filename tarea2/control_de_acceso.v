@@ -64,6 +64,9 @@ always @(*) begin
                 ProxEstado = A;
                 contador_intentos = 2'b00;
             end
+            else begin
+                ProxEstado = D;
+            end
     endcase
 end
 
