@@ -4,8 +4,6 @@ read_verilog control_de_acceso.v
 # Realizar la síntesis de alto nivel para obtener la descripción RTLIL
 synth
 
-# Guardar la descripción RTLIL en un archivo
-write_rtlil control_de_acceso_rtlil.il
 
 # Genera archivo sintetizado 
 write_verilog sintetizado.v
