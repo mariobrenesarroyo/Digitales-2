@@ -28,12 +28,15 @@ end
 // Lógica de cálculo de próximo estado
 always @(*) begin
     case (EstPresente)
-        A: if (llegado_vehiculo) begin
+        A:begin
+             if (llegado_vehiculo) begin
                 ProxEstado = B;
                 contador_intentos = 2'b00;
-            else
+            end
+            else begin
                 ProxEstado = A;
             end
+        end
 
         B: begin
             if (clave_ingresada == CLAVE_CORRECTA) begin
