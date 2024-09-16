@@ -29,7 +29,7 @@ module provador_acceso (
         // Sensor de fin de entrada y cierre de compuerta
         #(10) reset = 1;   // Activar reset
         #(10) reset = 0;   // Desactivar reset
-        #(12) llegado_vehiculo = 1; clave_ingresada = CLAVE_CORRECTA;
+        #(10) llegado_vehiculo = 1; clave_ingresada = CLAVE_CORRECTA;
         #(10) paso_vehiculo = 1; llegado_vehiculo = 0;
         #(40) paso_vehiculo = 0; // Fin de entrada
 
