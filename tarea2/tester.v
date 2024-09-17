@@ -66,8 +66,8 @@ module provador_acceso (
         #(10) clave_ingresada = CLAVE_CORRECTA;  // Usamos la clave correcta
         #(10) paso_vehiculo = 1; llegado_vehiculo = 1; // se trató de colar
         #(10) boton_reset = 1; // Presionar botón reset
-        #(10) boton_reset = 0; // Liberar botón reset
-        #(10) llegado_vehiculo = 1;
+        #(10) boton_reset = 1; // Liberar botón reset
+        #(10) llegado_vehiculo = 1; boton_reset = 1; 
         #(10) clave_ingresada = CLAVE_CORRECTA;  // Usamos la clave correcta
         #(10) paso_vehiculo = 1; llegado_vehiculo = 0;
         #(10) paso_vehiculo = 0; // Fin de entrada
