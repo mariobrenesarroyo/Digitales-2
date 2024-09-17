@@ -23,13 +23,15 @@ always @(posedge clk or posedge reset) begin
 
     end else
         EstPresente <= ProxEstado;
-        contador_intentos = prox_contador_intentos;
+        contador_intentos <= prox_contador_intentos;
 
     
 end
 
 // Lógica de cálculo de próximo estado
 always @(*) begin
+    prox_contador_intentos = contador_intentos;
+    ProxEstado = EstPresente;
     case (EstPresente)
         Esperando_vehiculo: begin
              if (llegado_vehiculo) begin

@@ -1,5 +1,5 @@
-`include "control_de_acceso.v"
-//`include "sintetizado.v"
+//`include "control_de_acceso.v"
+`include "sintetizado.v"
 `include "tester.v"
 
 
