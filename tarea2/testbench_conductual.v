@@ -2,6 +2,7 @@
 `include "tester.v"
 
 
+
 // Módulo principal
 module acceso_tb;
 
@@ -51,3 +52,4 @@ end
 
 
 endmodule
+

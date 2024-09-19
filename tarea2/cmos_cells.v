@@ -1,29 +1,29 @@
 module BUF(A, Y);
   input A;
   output Y;
-  assign Y = #0.1 A;
+  assign #1Y = A;
 endmodule
 
 module NOT(A, Y);
   input A;
   output Y;
-  assign Y = #0.1 ~A;
+  assign #1Y = ~A;
 endmodule
 
 module NAND(A, B, Y);
   input A, B;
   output Y;
-  assign Y = #0.2 ~(A & B);
+  assign #2Y = ~(A & B);
 endmodule
 
 module NOR(A, B, Y);
   input A, B;
   output Y;
-  assign Y = #0.2 ~(A | B);
+  assign #2Y = ~(A | B);
 endmodule
 
 module DFF(C, D, Q);
   input C, D; 
   output reg Q;
-  always @(posedge C) Q <= #0.2 D;
+  always @(posedge C) #2Q <= D;
 endmodule

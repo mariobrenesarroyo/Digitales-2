@@ -1,0 +1,15 @@
+# read design 
+read_verilog control_de_acceso.v
+
+# elaborate design hierarchy
+hierarchy -check -top control_acceso
+
+# the high-level stuff
+proc; opt; fsm; opt; memory; opt
+
+# mapping to internal cell library
+techmap; opt
+
+# write verilog file
+write_verilog control_rtlil.v
+

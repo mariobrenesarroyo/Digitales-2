@@ -1,5 +1,6 @@
-`include "control_de_acceso.v"
+`include "control_rtlil.v"
 `include "tester.v"
+
 
 
 // Módulo principal
@@ -51,3 +52,4 @@ end
 
 
 endmodule
+
