@@ -1,9 +1,26 @@
-# Leer el archivo Verilog del` diseño conductual
+# read design 
 read_verilog control_de_acceso.v
 
-# Realizar la síntesis de alto nivel para obtener la descripción RTLIL
-synth
+# elaborate design hierarchy
+hierarchy -check -top control_acceso
 
+# the high-level stuff
+proc; opt; fsm; opt; memory; opt
 
-# Genera archivo sintetizado 
-write_verilog sintetizado.v
+# mapping to internal cell library
+techmap; opt
+
+# mapping flip-flops to cmos_cells.lib
+dfflibmap -liberty ./cmos_cells.lib
+
+# mapping logic to cmos_cells.lib
+abc -liberty ./cmos_cells.lib
+
+#Generate GraphViz output
+show
+
+# cleanup
+clean
+
+# write synthesized design
+write_verilog control_synth.v
