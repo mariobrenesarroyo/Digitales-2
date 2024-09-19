@@ -7,7 +7,7 @@ SYNTHFILES = testbench_synth.v
 OUTFILE = a.out
 VCDFILE = resultados.vcd
 SYNTHESIS_SCRIPT = sintesis_rtlil.ys
-SYNTH_SCRIPT = sintetis.ys
+SYNTH_SCRIPT = sintesis.ys
 RTLIL_CONTROL = control_rtlil.v
 SYNTH_CONTROL = control_synth.v
 
@@ -29,10 +29,10 @@ rtlil:
 
 # Regla para la síntesis
 synth:
-	yosys $(SYNTH_SCRIPT)
-	iverilog $(SYNTHFILES)
-	vvp $(OUTFILE)
-	gtkwave $(VCDFILE)
+	sudo yosys $(SYNTH_SCRIPT)
+	sudo iverilog $(SYNTHFILES)
+	sudo vvp $(OUTFILE)
+	sudo gtkwave $(VCDFILE)
 
 # Regla para limpiar archivos generados
 clean:
