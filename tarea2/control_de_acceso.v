@@ -20,12 +20,12 @@ always @(posedge clk or posedge reset) begin
     if (reset) begin
         EstPresente <= Esperando_vehiculo;
         contador_intentos <= 2'b00;
-
-    end else
+    end
+     
+        else begin
         EstPresente <= ProxEstado;
         contador_intentos <= prox_contador_intentos;
-
-    
+        end
 end
 
 // Lógica de cálculo de próximo estado
@@ -75,7 +75,7 @@ always @(*) begin
 
         BLOQUEO: if (boton_reset) begin
                 ProxEstado = Esperando_vehiculo;
-                contador_intentos = 2'b00;
+                prox_contador_intentos = 2'b00;
             end
             else begin
                 ProxEstado = BLOQUEO;
