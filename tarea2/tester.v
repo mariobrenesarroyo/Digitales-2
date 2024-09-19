@@ -30,17 +30,17 @@ module provador_acceso (
         #(10) reset = 1;   // Activar reset
         #(10) reset = 0;   // Desactivar reset
         #(10) llegado_vehiculo = 1; clave_ingresada = CLAVE_CORRECTA;
-        #(10) paso_vehiculo = 1; llegado_vehiculo = 0;
+        #(20) paso_vehiculo = 1; llegado_vehiculo = 0;
         #(40) paso_vehiculo = 0; // Fin de entrada
 
         // Prueba #2: Ingreso de pin incorrecto menos de 3 veces
         // Llegada de un vehículo, ingreso de pin incorrecto (una o dos veces)
         // Puerta permanece cerrada, ingreso de pin correcto, funcionamiento normal básico
         #(20) llegado_vehiculo = 1;
-        #(10) clave_ingresada = 16'h1234; // Clave incorrecta
-        #(10) clave_ingresada = 16'h5678; // Clave incorrecta
-        #(10) clave_ingresada = CLAVE_CORRECTA; // Fin de llegada de vehículo
-        #(10) paso_vehiculo = 1; llegado_vehiculo = 0;
+        #(20) clave_ingresada = 16'h1234; // Clave incorrecta
+        #(20) clave_ingresada = 16'h5678; // Clave incorrecta
+        #(20) clave_ingresada = CLAVE_CORRECTA; // Fin de llegada de vehículo
+        #(20) paso_vehiculo = 1; llegado_vehiculo = 0;
         #(20) paso_vehiculo = 0; // Fin de entrada
 
 
@@ -48,29 +48,29 @@ module provador_acceso (
         // Revisión de alarma de pin incorrecto y contador de intentos incorrectos
         // Ingreso de pin correcto, funcionamiento normal básico
         #(30) llegado_vehiculo = 1; clave_ingresada = 16'h1234;
-        #(10) clave_ingresada = 16'h5678; // Clave incorrecta
-        #(10) clave_ingresada = 16'h9876; // Clave incorrecta
-        #(10) llegado_vehiculo = 0; // Fin de llegada de vehículo
-        #(10) boton_reset = 1; // Presionar botón reset
-        #(10) boton_reset = 0; // Liberar botón reset
-        #(10) llegado_vehiculo = 1;
-        #(10) clave_ingresada = CLAVE_CORRECTA;  // Usamos la clave correcta
-        #(10) paso_vehiculo = 1; llegado_vehiculo = 0;
-        #(10) paso_vehiculo = 0; // Fin de entrada
+        #(20) clave_ingresada = 16'h5678; // Clave incorrecta
+        #(20) clave_ingresada = 16'h9876; // Clave incorrecta
+        #(20) llegado_vehiculo = 0; // Fin de llegada de vehículo
+        #(20) boton_reset = 1; // Presionar botón reset
+        #(20) boton_reset = 0; // Liberar botón reset
+        #(20) llegado_vehiculo = 1;
+        #(20) clave_ingresada = CLAVE_CORRECTA;  // Usamos la clave correcta
+        #(20) paso_vehiculo = 1; llegado_vehiculo = 0;
+        #(20) paso_vehiculo = 0; // Fin de entrada
 
 
         // Prueba #4: Alarma de bloqueo
         // Ambos sensores encienden al mismo tiempo, encendido de alarma de bloqueo
         // Ingreso de clave incorrecta, bloqueo permanece, ingreso de clave correcta, desbloqueo
         #(20) llegado_vehiculo = 1;
-        #(10) clave_ingresada = CLAVE_CORRECTA;  // Usamos la clave correcta
-        #(10) paso_vehiculo = 1; llegado_vehiculo = 1; // se trató de colar
-        #(10) boton_reset = 1; // Presionar botón reset
-        #(10) boton_reset = 1; // Liberar botón reset
-        #(10) llegado_vehiculo = 1; boton_reset = 1; 
-        #(10) clave_ingresada = CLAVE_CORRECTA;  // Usamos la clave correcta
-        #(10) paso_vehiculo = 1; llegado_vehiculo = 0;
-        #(10) paso_vehiculo = 0; // Fin de entrada
+        #(20) clave_ingresada = CLAVE_CORRECTA;  // Usamos la clave correcta
+        #(20) paso_vehiculo = 1; llegado_vehiculo = 1; // se trató de colar
+        #(20) boton_reset = 1; // Presionar botón reset
+        #(20) boton_reset = 1; // Liberar botón reset
+        #(20) llegado_vehiculo = 1; boton_reset = 1; 
+        #(20) clave_ingresada = CLAVE_CORRECTA;  // Usamos la clave correcta
+        #(20) paso_vehiculo = 1; llegado_vehiculo = 0;
+        #(20) paso_vehiculo = 0; // Fin de entrada
 
         // Terminar la simulación
         #(30) $finish;

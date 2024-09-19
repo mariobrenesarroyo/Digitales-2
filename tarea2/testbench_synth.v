@@ -1,5 +1,7 @@
-`include "control_de_acceso.v"
+
+`include "control_synth.v"
 `include "tester.v"
+`include "cmos_cells.v"
 
 
 // Módulo principal
@@ -51,3 +53,4 @@ end
 
 
 endmodule
+
