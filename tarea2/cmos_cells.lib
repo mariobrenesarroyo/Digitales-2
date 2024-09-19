@@ -31,9 +31,13 @@ library(demo) {
 
   cell(DFF) {
     area: 18;
-    pin(C) { direction: input; clock: true; }
+    ff(IQ, IQN) { clocked_on: C;
+                  next_state: D; }
+    pin(C) { direction: input;
+                 clock: true; }
     pin(D) { direction: input; }
-    pin(Q) { direction: output; function: "C ? D : Q"; }
-    delay: 0.3;
+    pin(Q) { direction: output;
+              function: "IQ"; }
   }
+
 }
