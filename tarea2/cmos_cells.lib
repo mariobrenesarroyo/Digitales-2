@@ -1,34 +1,30 @@
 library(demo) {
   cell(BUF) {
     area: 3;
-    pin(A) { direction: input; }
-    pin(Y) { direction: output; function: "A"; }
-    delay: 0.1;
+    pin(A) { direction: input;}
+    pin(Y) { direction: output;
+              function: "A";}
   }
-
   cell(NOT) {
     area: 3;
     pin(A) { direction: input; }
-    pin(Y) { direction: output; function: "A'"; }
-    delay: 0.1;
+    pin(Y) { direction: output;
+              function: "A'"; }
   }
-
   cell(NAND) {
     area: 4;
     pin(A) { direction: input; }
     pin(B) { direction: input; }
-    pin(Y) { direction: output; function: "(A*B)'"; }
-    delay: 0.2;
+    pin(Y) { direction: output;
+             function: "(A*B)'"; }
   }
-
   cell(NOR) {
     area: 4;
     pin(A) { direction: input; }
     pin(B) { direction: input; }
-    pin(Y) { direction: output; function: "(A+B)'"; }
-    delay: 0.2;
+    pin(Y) { direction: output;
+             function: "(A+B)'"; }
   }
-
   cell(DFF) {
     area: 18;
     ff(IQ, IQN) { clocked_on: C;
@@ -38,7 +34,5 @@ library(demo) {
     pin(D) { direction: input; }
     pin(Q) { direction: output;
               function: "IQ"; }
-    delay 0.2
   }
-
 }
