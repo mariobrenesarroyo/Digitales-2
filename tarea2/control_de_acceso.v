@@ -16,7 +16,7 @@ localparam BLOQUEO = 2'b11;    //Estado de bloqueo
 
 
 // Memoria de estados
-always @(posedge clk or posedge reset) begin
+always @(posedge clk) begin
     if (reset) begin
         EstPresente <= Esperando_vehiculo;
         contador_intentos <= 2'b00;
