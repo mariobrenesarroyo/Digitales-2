@@ -38,6 +38,7 @@ library(demo) {
     pin(D) { direction: input; }
     pin(Q) { direction: output;
               function: "IQ"; }
+    delay 0.2
   }
 
 }
