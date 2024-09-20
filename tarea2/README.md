@@ -1,8 +1,7 @@
-# Vamos a generar un archivo README.md con el contenido que proporcionamos
-readme_content = """
+
 # Proyecto de Simulación y Síntesis
 
-Este proyecto contiene varios archivos relacionados con la simulación y síntesis de circuitos digitales. A continuación, se describe el propósito de cada archivo y cómo utilizar el Makefile para automatizar las tareas comunes.
+Este proyecto contiene varios archivos relacionados con la simulación y síntesis de circuitos digitales. A continuación, se describe el propósito de cada archivo y cómo utilizar el Makefile para automatizar las tareas comunes. Mario Enrique brenes Arroyo c11194
 
 ## Archivos
 
