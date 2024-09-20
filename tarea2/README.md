@@ -63,6 +63,10 @@ vvp a.out
 gtkwave resultados.vcd
 ```
 
+En caso de que quiera correr un diseño sintetizado sin retardo abra testbench_synth.v y cambie:
+include cmos_cells.v por cmos_cells_sin_retardo.v
+
+
 ### Reglas de Limpieza
 **clean**: Elimina los archivos generados por las simulaciones.
 
