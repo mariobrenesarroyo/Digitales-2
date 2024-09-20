@@ -100,6 +100,11 @@ rm -f control_synth.v
 ```
 
 ### Notas
+* siempre despues de ejecutar cualquier make, ejecutar el make clean correspondiente
+* para make conductual despues ejecute make clean
+* para make rtlil despues ejecute make clean-rtlil
+* para make synth despues ejecute make clean-synth
+
 * Asegúrate de tener instalados iverilog, vvp, gtkwave y yosys para ejecutar las simulaciones y síntesis correctamente.
 
 * Los comandos del y rm están incluidos para compatibilidad con Windows y Unix respectivamente.
