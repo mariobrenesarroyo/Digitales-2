@@ -28,7 +28,7 @@ always @(posedge clk) begin
 	   sec_recibida[0] <= s_in;
 	   sec_recibida[1] <= sec_recibida[0];
 	   sec_recibida[2] <= sec_recibida[1];
-           sec_recibida[3] <= sec_recibida[2];
+     sec_recibida[3] <= sec_recibida[2];
 	   sec_recibida[4] <= sec_recibida[3];
 	end
 
