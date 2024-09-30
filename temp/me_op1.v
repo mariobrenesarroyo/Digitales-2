@@ -1,10 +1,10 @@
 // Declaración del módulo y parámetros
 module det_sec #(parameter SECUENCIA = 5'b10100,
-                 parameter SEC_REINICIO = 5'b00000) (clk,rst,s_in,valido);
+                 parameter SEC_REINICIO = 5'b00000) (clk,rst,s_in,valido, nuevo_numero);
 
 // Declaración de entradas y salidas
 input clk,rst,s_in;
-output reg valido;
+output reg valido,nuevo_numero;
 
 //Declaración de variables internas
 reg   [4:0] sec_recibida;
@@ -37,6 +37,7 @@ end
 //Definir lógica combinacional
 //Case de los estados
 always @(*) begin
+  prox_estado = estado_actual;
   //Case de estados para definir:
   //1. Lógica de próximo estado
   //2. Lógica de salida
@@ -61,5 +62,10 @@ always @(*) begin
   endcase
 
 end
+// lógica de salida nuevo_numero
+always @(*) begin
+  nuevo_numero = ((estado_actual == 2'b01) & (clk) & (~rst));
+end
+
 
 endmodule

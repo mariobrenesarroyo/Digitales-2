@@ -1,9 +1,9 @@
 // Declaración del módulo y parámetros
  module probador #(parameter SECUENCIA = 5'b10100,
-                   parameter SEC_REINICIO = 5'b00000) (clk,rst,s_in,valido); 
+                   parameter SEC_REINICIO = 5'b00000) (clk,rst,s_in,valido,nuevo_numero); 
   // Declaración de entradas y salidas
  output reg clk,rst,s_in;
- input  valido;
+ input  valido,nuevo_numero;
 
     initial begin
     clk = 0;
