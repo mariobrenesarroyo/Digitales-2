@@ -44,6 +44,7 @@ module cajero (
             EstPresente <= Esperando_tarjeta;
             contador_intentos <= 2'b00;
             pin_recibido <= 16'h0;
+            Balance <= BALANCE_INICIAL;
         end else begin
             EstPresente <= ProxEstado;
             contador_intentos <= prox_contador_intentos;
