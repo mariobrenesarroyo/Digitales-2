@@ -57,8 +57,8 @@ module cajero (
     always @(posedge clk) begin
         //por defecto
         prox_contador_intentos = contador_intentos;
-
         ProxEstado = EstPresente;
+        Balance = BALANCE_INICIAL;
         case (EstPresente)
         Esperando_tarjeta: begin
             if (TARJETA_RECIBIDA) begin
