@@ -46,7 +46,24 @@ module provador (
         #(20) DIGITO_STB = 1;
         #(20) DIGITO_STB = 0;
         #(20) DIGITO_STB = 1;
-        #(20) DIGITO_STB = 0; 
+        #(20) DIGITO_STB = 0;
+        #(30) rst = 0;
+        #(10) rst = 1;
+
+
+
+        //caso 4 retiro fallido
+        #(20) TARJETA_RECIBIDA = 1'b1; DIGITO = 4'h1;
+        #(20) DIGITO = 4'h1;
+        #(20) DIGITO = 4'h9; TARJETA_RECIBIDA = 0;
+        #(20) DIGITO = 4'h4; 
+        #(20) DIGITO_STB = 1; TIPO_TRNANS = 1;
+        #(20) DIGITO_STB = 0; MONTO = 32'd45000;
+        #(20) MONTO_STB = 1;  TIPO_TRNANS = 0;
+        #(20) MONTO_STB = 0; MONTO = 32'd0;
+        #(20) DIGITO_STB = 0; MONTO = 32'd10000;
+        #(20) MONTO_STB = 1;  TIPO_TRNANS = 0;
+        #(20) MONTO_STB = 0; MONTO = 32'd0;
 
 
   
