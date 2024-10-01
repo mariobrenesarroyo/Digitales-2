@@ -49,12 +49,10 @@ module cajero (
         BLOQUEO = 1'b0;
         FONDOS_INSUFICIENTES = 1'b0;
         BALANCE_ACTUALIZADO = 1'b0;
-        pin_recibido = 16'b0;
         // Por defecto
         prox_contador_intentos = contador_intentos;
         Prox_Balance = Balance;
         ProxEstado = EstPresente;
-        pin_recibido = 16'b0;
         
         case (EstPresente)
         
