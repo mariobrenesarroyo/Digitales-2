@@ -51,9 +51,9 @@ module cajero (
         BALANCE_ACTUALIZADO = 1'b0;
         // Por defecto
         prox_contador_intentos = contador_intentos;
-        Prox_Balance = Balance;
-        ProxEstado = EstPresente;
-        
+        Prox_Balance = Balance; 
+
+
         case (EstPresente)
         
         // Estado Esperando_tarjeta
@@ -159,5 +159,5 @@ module cajero (
         
         endcase
     end
-
+    
 endmodule

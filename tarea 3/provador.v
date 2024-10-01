@@ -9,35 +9,65 @@ module provador (
 
     initial begin
         clk = 0; 
-        rst = 1;
+        rst = 0;
         BALANCE_INICIAL = 64'd20000; // Inicializar balance a 20,000
         PIN = 16'h1194; // Inicializar PIN a 1194
         TARJETA_RECIBIDA = 0; DIGITO_STB = 0; TIPO_TRNANS = 0; MONTO_STB = 0;
 
-        //Caso 1 deposito perfecto 
-        #(10) rst = 0;       // Activar reset
-        #(10) rst = 1; TARJETA_RECIBIDA = 1'b1;   // Desactivar reset y recibe tarjeta
-        #(20) TARJETA_RECIBIDA = 0; DIGITO = 4'h1;
-        #(20) DIGITO = 4'h1;
-        #(20) DIGITO = 4'h9;
-        #(20) DIGITO = 4'h4;
-        #(20) DIGITO_STB = 1;
-        #(20) DIGITO_STB = 0; MONTO = 32'd15000;
-        #(20) MONTO_STB = 1;
-        #(20) MONTO_STB = 0; MONTO = 32'd0;
+//Caso 1 deposito perfecto 
+        #(10) rst = 0;                              
+        #(10) rst = 1;                                
 
-        //caso 2 retiro perfecto
-        #(20) TARJETA_RECIBIDA = 1'b1; DIGITO = 4'h1;
+
+        #(20) TARJETA_RECIBIDA = 1'b1;
         #(20) DIGITO = 4'h1;
-        #(20) DIGITO = 4'h9; TARJETA_RECIBIDA = 0;
-        #(20) DIGITO = 4'h4; 
-        #(20) DIGITO_STB = 1; TIPO_TRNANS = 1;
-        #(20) DIGITO_STB = 0; MONTO = 32'd15000;
+        #(20) DIGITO = 4'h1;
+        #(20) DIGITO = 4'h9;                          
+        #(20) DIGITO = 4'h4;
+         
+         //prox estado = tipo de transación 
+        #(20) DIGITO_STB = 1;  
+
+        //estado presente tipo de transacción
+        #(20) TARJETA_RECIBIDA = 0; DIGITO_STB = 0; TIPO_TRNANS = 0;
+
+        //estado presente = deposito
+        #(20) MONTO = 32'd15000; MONTO_STB = 1; 
+        
+
+
+//caso 2 retiro perfecto
+        //estado presente esperando tarjeta
+        #(40) MONTO_STB = 0; MONTO = 32'd0;
+
+        //prox estado = esperando pin 
+        #(20) TARJETA_RECIBIDA = 1'b1;
+
+        //estado presente = esperando pin
+        #(20) DIGITO = 4'h1;
+        #(20) DIGITO = 4'h1;
+        #(20) DIGITO = 4'h9; TARJETA_RECIBIDA = 0;  
+        #(20) DIGITO = 4'h4;
+
+        //prox estado = tipo de transación
+        #(20) DIGITO_STB = 1; 
+
+        //estado presente = tipo de transación
+        #(20) DIGITO_STB = 0; TIPO_TRNANS = 1;
+
+        //estado presente = retiro
+        #(20) MONTO = 32'd15000;
+
+        //prox estado = esperando tarjeta 
         #(20) MONTO_STB = 1;  TIPO_TRNANS = 0;
         #(20) MONTO_STB = 0; MONTO = 32'd0;
 
-        //caso 3 clave 3 veces incorrecta
-        #(20) TARJETA_RECIBIDA = 1; DIGITO = 4'h1;
+//caso 3 clave 3 veces incorrecta
+
+        //prox estado = ingresando pin
+        #(20) TARJETA_RECIBIDA = 1;
+        //estado presente = ingresando pin
+        #(20) DIGITO = 4'h1;
         #(20) DIGITO = 4'h1;
         #(20) DIGITO = 4'h9; TARJETA_RECIBIDA = 0;
         #(20) DIGITO = 4'h5;
@@ -47,18 +77,29 @@ module provador (
         #(20) DIGITO_STB = 0;
         #(20) DIGITO_STB = 1;
         #(20) DIGITO_STB = 0;
+        //proximo estado = esperando tarjeta
         #(30) rst = 0;
+        //estado presente = esperando tarjeta
         #(10) rst = 1;
 
 
 
         //caso 4 retiro fallido
-        #(20) TARJETA_RECIBIDA = 1'b1; DIGITO = 4'h1;
+        //proximo estado = ingresando pin
+        #(20) TARJETA_RECIBIDA = 1'b1;
+        #(20) DIGITO = 4'h1;
         #(20) DIGITO = 4'h1;
         #(20) DIGITO = 4'h9; TARJETA_RECIBIDA = 0;
-        #(20) DIGITO = 4'h4; 
-        #(20) DIGITO_STB = 1; TIPO_TRNANS = 1;
+
+        //proximo estado = tipo trans
+        #(20) DIGITO = 4'h4; DIGITO_STB = 1;
+
+        //proximo estado = retiro
+        #(20) TIPO_TRNANS = 1;
+
+        //estado presente = retiro
         #(20) DIGITO_STB = 0; MONTO = 32'd45000;
+
         #(20) MONTO_STB = 1;  TIPO_TRNANS = 0;
         #(20) MONTO_STB = 0; MONTO = 32'd0;
         #(20) DIGITO_STB = 0; MONTO = 32'd10000;
