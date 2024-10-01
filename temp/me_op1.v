@@ -46,7 +46,7 @@ always @(*) begin
     2'b01: begin
 	     valido = 0;
              if (sec_recibida == SECUENCIA) prox_estado = 2'b10;
-	     else prox_estado = 2'b01;
+	           else prox_estado = 2'b01;
            end
     //Estado sincronizado
     2'b10: begin 
