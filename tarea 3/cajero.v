@@ -12,7 +12,7 @@ module cajero (
     reg [1:0] contador_intentos, prox_contador_intentos;
     reg [15:0] pin_recibido;
     reg [2:0] EstPresente, ProxEstado;
-    reg [63:0] Balance;
+    reg [63:0] Balance, Prox_Balance;
 
     // Lógica de asignación de estados
     localparam Esperando_tarjeta = 3'b000;
@@ -31,6 +31,7 @@ module cajero (
             Balance <= BALANCE_INICIAL;
         end 
         else begin
+            Balance <= Prox_Balance;
             EstPresente <= ProxEstado;
             contador_intentos <= prox_contador_intentos;
             pin_recibido[3:0] <= DIGITO[3:0];
@@ -49,11 +50,9 @@ module cajero (
         FONDOS_INSUFICIENTES = 1'b0;
         BALANCE_ACTUALIZADO = 1'b0;
         pin_recibido = 16'b0;
-
-        
         // Por defecto
         prox_contador_intentos = contador_intentos;
-        Balance = BALANCE_INICIAL;
+        Prox_Balance = Balance;
         ProxEstado = EstPresente;
         pin_recibido = 16'b0;
         
@@ -114,7 +113,7 @@ module cajero (
         Retiro: begin
             if (MONTO_STB) begin
                 if (MONTO <= BALANCE_INICIAL) begin
-                    Balance = BALANCE_INICIAL - MONTO;
+                    Prox_Balance = Balance - MONTO;
                     BALANCE_ACTUALIZADO = 1'b1;
                     ENTREGAR_DINERO = 1'b1;
                     ProxEstado = Esperando_tarjeta;
@@ -133,7 +132,7 @@ module cajero (
         Deposito: begin
             if (MONTO_STB) begin
                 if (MONTO != 32'b0) begin
-                    Balance = BALANCE_INICIAL + MONTO;
+                    Prox_Balance = Balance + MONTO;
                     BALANCE_ACTUALIZADO = 1'b1;
                     ProxEstado = Esperando_tarjeta;
                 end
