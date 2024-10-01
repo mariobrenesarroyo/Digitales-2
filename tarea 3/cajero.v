@@ -1,20 +1,6 @@
 module cajero (
-    clk,
-    rst,
-    TARJETA_RECIBIDA,
-    TIPO_TRNANS,
-    DIGITO,
-    DIGITO_STB,
-    PIN,
-    MONTO,
-    MONTO_STB,
-    BALANCE_INICIAL,
-    BALANCE_ACTUALIZADO,
-    ENTREGAR_DINERO,
-    PIN_INCORRECTO,
-    ADVERTENCIA,
-    BLOQUEO,
-    FONDOS_INSUFICIENTES
+    clk,rst,TARJETA_RECIBIDA,TIPO_TRNANS,DIGITO,DIGITO_STB,PIN,MONTO,MONTO_STB,BALANCE_INICIAL,
+    BALANCE_ACTUALIZADO,ENTREGAR_DINERO,PIN_INCORRECTO,ADVERTENCIA,BLOQUEO,FONDOS_INSUFICIENTES
 );
     input  clk, rst, TARJETA_RECIBIDA, TIPO_TRNANS, DIGITO_STB, MONTO_STB;
     output reg ENTREGAR_DINERO, PIN_INCORRECTO, ADVERTENCIA, BLOQUEO, FONDOS_INSUFICIENTES, BALANCE_ACTUALIZADO;
@@ -66,6 +52,7 @@ module cajero (
         // Por defecto
         prox_contador_intentos = contador_intentos;
         Balance = BALANCE_INICIAL;
+        ProxEstado = EstPresente;
         
         case (EstPresente)
         
