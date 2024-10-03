@@ -78,9 +78,9 @@ module provador (
         #(20) DIGITO_STB = 1;
         #(20) DIGITO_STB = 0;
         //proximo estado = esperando tarjeta
-        #(30) rst = 0;
+        #(40) rst = 0;
         //estado presente = esperando tarjeta
-        #(10) rst = 1;
+        #(20) rst = 1;
 
 
 

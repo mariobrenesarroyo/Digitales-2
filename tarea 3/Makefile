@@ -38,14 +38,14 @@ clean:
 
 # Objetivo para RTLIL
 rtlil:
-	yosys sintetis sintesis_rtlil.ys
+	yosys sintesis_rtlil.ys
 	iverilog testbench_rtlil.v
 	$(VVP)
 	$(GTKWAVE)
 
 # Objetivo para síntesis
 synth:
-	yosys sintetis sintesis.ys
+	yosys sintesis.ys
 	iverilog testbench_synth.v
 	$(VVP)
 	$(GTKWAVE)
