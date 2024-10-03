@@ -32,13 +32,15 @@ module provador (
         #(20) TARJETA_RECIBIDA = 0; DIGITO_STB = 0; TIPO_TRNANS = 0;
 
         //estado presente = deposito
-        #(20) MONTO = 32'd15000; MONTO_STB = 1; 
-        
+        #(20) MONTO = 32'd15000; 
+	// proximo estado = esperando tarjeta
+	#(20) MONTO_STB = 1; 
+        #(20) MONTO_STB = 0;
 
 
 //caso 2 retiro perfecto
         //estado presente esperando tarjeta
-        #(40) MONTO_STB = 0; MONTO = 32'd0;
+        #(40) MONTO = 32'd0;
 
         //prox estado = esperando pin 
         #(20) TARJETA_RECIBIDA = 1'b1;

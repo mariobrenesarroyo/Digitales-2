@@ -13,19 +13,19 @@ endmodule
 module NAND(A, B, Y);
   input A, B;
   output Y;
-  assign #2Y = ~(A & B); // Retardo de 2
+  assign #1Y = ~(A & B); // Retardo de 1
 endmodule
 
 module NOR(A, B, Y);
   input A, B;
   output Y;
-  assign #1Y = ~(A | B); // Retardo de 2
+  assign #1Y = ~(A | B); // Retardo de 1
 endmodule
 
 module DFF(C, D, Q);
   input C, D; 
   output reg Q;
   always @(posedge C) begin
-    #2Q <= D; // Retardo de 2
+    #1Q <= D; // Retardo de 1
   end
 endmodule

@@ -1,7 +1,7 @@
 `include "cajero_synth.v"
 `include "provador.v"
-`include "cmos_cells_sin_retardo.v"
-//`include "cmos_cells.v"
+//`include "cmos_cells_sin_retardo.v"
+`include "cmos_cells.v"
 
 module cajero_tb;
     // Declaración de señales
