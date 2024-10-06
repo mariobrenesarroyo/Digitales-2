@@ -40,7 +40,7 @@ module cajero (
     localparam Tipo_de_trans = 3'b101;
 
     // Memoria de estados y actualización de registros
-    always @(posedge clk or negedge rst) begin
+    always @(posedge clk) begin
         if (~rst) begin
             EstPresente <= Esperando_tarjeta;
             contador_intentos <= 2'b00;
