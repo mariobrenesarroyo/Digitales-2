@@ -21,20 +21,28 @@ module provador (
 
         #(20) TARJETA_RECIBIDA = 1'b1;
         #(20) DIGITO = 4'h1;
+        #(20) DIGITO_STB = 1;
+        #(20) DIGITO_STB = 0;
         #(20) DIGITO = 4'h1;
-        #(20) DIGITO = 4'h9;                          
+        #(20) DIGITO_STB = 1;
+        #(20) DIGITO_STB = 0;
+        #(20) DIGITO = 4'h9;
+        #(20) DIGITO_STB = 1;
+        #(20) DIGITO_STB = 0;                          
         #(20) DIGITO = 4'h4;
          
          //prox estado = tipo de transación 
-        #(20) DIGITO_STB = 1;  
+        #(20) DIGITO_STB = 1;
+        #(20) DIGITO_STB = 0;
+  
 
         //estado presente tipo de transacción
         #(20) TARJETA_RECIBIDA = 0; DIGITO_STB = 0; TIPO_TRNANS = 0;
 
         //estado presente = deposito
         #(20) MONTO = 32'd15000; 
-	// proximo estado = esperando tarjeta
-	#(20) MONTO_STB = 1; 
+	    // proximo estado = esperando tarjeta
+	    #(20) MONTO_STB = 1; 
         #(20) MONTO_STB = 0;
 
 
@@ -47,15 +55,22 @@ module provador (
 
         //estado presente = esperando pin
         #(20) DIGITO = 4'h1;
+        #(20) DIGITO_STB = 1;
+        #(20) DIGITO_STB = 0;
         #(20) DIGITO = 4'h1;
-        #(20) DIGITO = 4'h9; TARJETA_RECIBIDA = 0;  
+        #(20) DIGITO_STB = 1;
+        #(20) DIGITO_STB = 0;
+        #(20) DIGITO = 4'h9; TARJETA_RECIBIDA = 0; 
+        #(20) DIGITO_STB = 1;
+        #(20) DIGITO_STB = 0; 
         #(20) DIGITO = 4'h4;
 
+
         //prox estado = tipo de transación
-        #(20) DIGITO_STB = 1; 
+        #(20) DIGITO_STB = 1;
 
         //estado presente = tipo de transación
-        #(20) DIGITO_STB = 0; TIPO_TRNANS = 1;
+        #(20) TIPO_TRNANS = 1; DIGITO_STB = 0;
 
         //estado presente = retiro
         #(20) MONTO = 32'd15000;
@@ -69,16 +84,34 @@ module provador (
         //prox estado = ingresando pin
         #(20) TARJETA_RECIBIDA = 1;
         //estado presente = ingresando pin
-        #(20) DIGITO = 4'h1;
-        #(20) DIGITO = 4'h1;
-        #(20) DIGITO = 4'h9; TARJETA_RECIBIDA = 0;
-        #(20) DIGITO = 4'h5;
-        #(20) DIGITO_STB = 1;
+        //primer intento
+        #(20) DIGITO = 4'h1; DIGITO_STB = 1;
         #(20) DIGITO_STB = 0;
-        #(20) DIGITO_STB = 1;
+        #(20) DIGITO = 4'h1; DIGITO_STB = 1;
         #(20) DIGITO_STB = 0;
-        #(20) DIGITO_STB = 1;
+        #(20) DIGITO = 4'h9; TARJETA_RECIBIDA = 0; DIGITO_STB = 1;
         #(20) DIGITO_STB = 0;
+        #(20) DIGITO = 4'h5; DIGITO_STB = 1;
+        #(20) DIGITO_STB = 0;
+        //segundo intento
+        #(40) DIGITO = 4'h1; DIGITO_STB = 1;
+        #(20) DIGITO_STB = 0;
+        #(20) DIGITO = 4'h1; DIGITO_STB = 1;
+        #(20) DIGITO_STB = 0;
+        #(20) DIGITO = 4'h9; TARJETA_RECIBIDA = 0; DIGITO_STB = 1;
+        #(20) DIGITO_STB = 0;
+        #(20) DIGITO = 4'h5; DIGITO_STB = 1;
+        #(20) DIGITO_STB = 0;
+        //tercer intento
+        #(40) DIGITO = 4'h1; DIGITO_STB = 1;
+        #(20) DIGITO_STB = 0;
+        #(20) DIGITO = 4'h1; DIGITO_STB = 1;
+        #(20) DIGITO_STB = 0;
+        #(20) DIGITO = 4'h9; TARJETA_RECIBIDA = 0; DIGITO_STB = 1;
+        #(20) DIGITO_STB = 0;
+        #(20) DIGITO = 4'h5; DIGITO_STB = 1;
+        #(20) DIGITO_STB = 0;
+        
         //proximo estado = esperando tarjeta
         #(40) rst = 0;
         //estado presente = esperando tarjeta
@@ -90,17 +123,24 @@ module provador (
         //proximo estado = ingresando pin
         #(20) TARJETA_RECIBIDA = 1'b1;
         #(20) DIGITO = 4'h1;
+        #(20) DIGITO_STB = 1;
+        #(20) DIGITO_STB = 0;
         #(20) DIGITO = 4'h1;
+        #(20) DIGITO_STB = 1;
+        #(20) DIGITO_STB = 0;
         #(20) DIGITO = 4'h9; TARJETA_RECIBIDA = 0;
+        #(20) DIGITO_STB = 1;
+        #(20) DIGITO_STB = 0;
+        #(20) DIGITO = 4'h4;
 
         //proximo estado = tipo trans
-        #(20) DIGITO = 4'h4; DIGITO_STB = 1;
+        #(20) DIGITO_STB = 1;
 
         //proximo estado = retiro
-        #(20) TIPO_TRNANS = 1;
+        #(20) TIPO_TRNANS = 1; DIGITO_STB = 0;
 
         //estado presente = retiro
-        #(20) DIGITO_STB = 0; MONTO = 32'd45000;
+        #(20) MONTO = 32'd45000;
 
         #(20) MONTO_STB = 1;  TIPO_TRNANS = 0;
         #(20) MONTO_STB = 0; MONTO = 32'd0;

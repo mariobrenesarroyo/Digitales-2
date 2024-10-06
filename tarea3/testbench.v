@@ -1,4 +1,4 @@
-`include "cajero.v"
+`include "cajero2.v"
 `include "provador.v"
 
 module cajero_tb;
