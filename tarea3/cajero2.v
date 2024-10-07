@@ -95,24 +95,21 @@ module cajero (
             if (DIGITO_STB) begin
                 prox_contador_digito_stb = contador_digito_stb + 1;
                 if (contador_digito_stb == 4) begin
+                    prox_contador_digito_stb = 4'b0001;  // Reiniciar el contador de dígitos
                     if (pin_recibido == PIN) begin
                         ProxEstado = Tipo_de_trans;
                         prox_contador_intentos = 2'b00;  // Reinicio de intentos
-                        prox_contador_digito_stb = 4'b0000;
+                        prox_contador_digito_stb = 4'b0000; 
                     end
                     else begin
                         ProxEstado = Ingresando_pin;
-                        prox_contador_digito_stb = 4'b0001;
+                        contador_intentos = prox_contador_intentos + 1;
                     end
                 end
                 else begin
                     ProxEstado = Ingresando_pin;
                 end
             end
-
-            else if ((contador_digito_stb == 4) && (prox_contador_digito_stb == 1))begin
-                    contador_intentos = prox_contador_intentos + 1;
-                end
             
             else begin
                 if ((contador_intentos == 3)) begin
@@ -137,7 +134,6 @@ module cajero (
             end
 
         end
-
 
 
         // Estado Tipo_de_trans
