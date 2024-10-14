@@ -18,6 +18,7 @@ module receptor_i2c(
     reg [3:0] bit_count;
     reg [7:0] data_buffer;
     reg [6:0] addr_buffer;
+    reg rnw; // Bit de lectura/escritura
 
     // Inicialización de registros
     initial begin
@@ -28,6 +29,7 @@ module receptor_i2c(
         wr_data = 0;
         data_buffer = 0;
         addr_buffer = 0;
+        rnw = 0;
     end
 
     // Máquina de estados finita (FSM)
@@ -39,6 +41,7 @@ module receptor_i2c(
             wr_data <= 0;
             data_buffer <= 0;
             addr_buffer <= 0;
+            rnw <= 0;
         end else begin
             estado <= prox_estado;
         end
@@ -63,23 +66,28 @@ module receptor_i2c(
                     addr_buffer[6 - bit_count] <= sda_out;
                     bit_count <= bit_count + 1;
                     if (bit_count == 6) begin
-                        if (addr_buffer == i2c_addr) begin
-                            prox_estado <= DATA;
-                        end else begin
-                            prox_estado <= IDLE;
-                        end
+                        prox_estado <= DATA;
                         bit_count <= 0;
+                        rnw <= sda_out; // Guardar el bit de lectura/escritura
+                        if (addr_buffer != i2c_addr) begin
+                            prox_estado <= IDLE; // Dirección incorrecta, volver a IDLE
+                        end
                     end
                 end
             end
             DATA: begin
                 if (scl == 1) begin
-                    data_buffer[7 - bit_count] <= sda_out;
-                    bit_count <= bit_count + 1;
-                    if (bit_count == 7) begin
-                        wr_data <= {wr_data[7:0], data_buffer};
-                        prox_estado <= ACK;
-                        bit_count <= 0;
+                    if (!rnw) begin
+                        // Escritura desde el maestro
+                        data_buffer[7 - bit_count] <= sda_out;
+                        bit_count <= bit_count + 1;
+                        if (bit_count == 7) begin
+                            wr_data <= {wr_data[7:0], data_buffer}; // Almacenar el byte recibido
+                            prox_estado <= ACK;
+                            bit_count <= 0;
+                        end
+                    end else begin
+                        // Lectura hacia el maestro (a implementar si es necesario)
                     end
                 end
             end

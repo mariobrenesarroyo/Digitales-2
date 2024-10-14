@@ -92,43 +92,43 @@ module cajero (
         
         // Estado Ingresando_pin
         Ingresando_pin: begin
-    // Incrementar contador de dígitos si llega el strobe de un nuevo dígito
-    if (DIGITO_STB) begin
-        prox_contador_digito_stb = contador_digito_stb + 1;
-    end
+            // Incrementar contador de dígitos si llega el strobe de un nuevo dígito
+            if (DIGITO_STB) begin
+                prox_contador_digito_stb = contador_digito_stb + 1;
+            end
 
-    // Si se ingresaron 4 dígitos y el PIN es correcto, transiciona de estado
-    else if (contador_digito_stb == 4) begin
-        if (PIN == pin_recibido) begin
-            ProxEstado = Tipo_de_trans;    // PIN correcto, cambiar estado
-            prox_contador_digito_stb = 4'b0000; // Reiniciar contador
-            prox_contador_intentos = 2'b00;    // Reiniciar intentos
+            // Si se ingresaron 4 dígitos y el PIN es correcto, transiciona de estado
+            else if (contador_digito_stb == 4) begin
+                if (PIN == pin_recibido) begin
+                    ProxEstado = Tipo_de_trans;    // PIN correcto, cambiar estado
+                    prox_contador_digito_stb = 4'b0000; // Reiniciar contador
+                    prox_contador_intentos = 2'b00;    // Reiniciar intentos
+                end
+                else begin
+                    prox_contador_digito_stb = 4'b0001;  // PIN incorrecto, reintentar
+                    prox_contador_intentos = contador_intentos + 1;
+                end
+            end
+
+            // Manejo de intentos: bloquea si hay 3 fallos, advertencias para 2 fallos, etc.
+            else if (contador_intentos == 3) begin
+                ProxEstado = E_Bloqueo;  // Bloqueo tras 3 intentos fallidos
+                BLOQUEO = 1'b1;
+            end
+            else if (contador_intentos == 2) begin
+                ProxEstado = Ingresando_pin;  // Advertencia tras 2 intentos fallidos
+                ADVERTENCIA = 1'b1;
+            end
+            else if (contador_intentos == 1) begin
+                ProxEstado = Ingresando_pin;  // Indica PIN incorrecto tras 1 fallo
+                PIN_INCORRECTO = 1'b1;
+            end
+
+            // Si no hay condición especial, seguir esperando PIN
+            else begin
+                ProxEstado = Ingresando_pin;
+            end
         end
-        else begin
-            prox_contador_digito_stb = 4'b0001;  // PIN incorrecto, reintentar
-            prox_contador_intentos = contador_intentos + 1;
-        end
-    end
-
-    // Manejo de intentos: bloquea si hay 3 fallos, advertencias para 2 fallos, etc.
-    else if (contador_intentos == 3) begin
-        ProxEstado = E_Bloqueo;  // Bloqueo tras 3 intentos fallidos
-        BLOQUEO = 1'b1;
-    end
-    else if (contador_intentos == 2) begin
-        ProxEstado = Ingresando_pin;  // Advertencia tras 2 intentos fallidos
-        ADVERTENCIA = 1'b1;
-    end
-    else if (contador_intentos == 1) begin
-        ProxEstado = Ingresando_pin;  // Indica PIN incorrecto tras 1 fallo
-        PIN_INCORRECTO = 1'b1;
-    end
-
-    // Si no hay condición especial, seguir esperando PIN
-    else begin
-        ProxEstado = Ingresando_pin;
-    end
-end
 
 
         
