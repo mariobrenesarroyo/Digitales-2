@@ -1,35 +1,21 @@
-module contador_3_bits(
-    input wire clk,
-    input wire rst,
-    output reg a
+module i2c_clock_generator (
+    input wire clk,    // Señal de reloj de entrada
+    input wire rst,    // Señal de reinicio
+    output  scl     // Señal de reloj I2C de salida
 );
+reg [1:0] counter,nxt_counter;  // Contador para dividir la frecuencia
+reg [7:0] i2c_direccion_rw ;
 
-    reg [2:0] contador;       // Contador de 3 bits
-    reg [2:0] prox_contador;  // Próximo valor del contador
-
-    // Inicialización del contador y la salida 'a'
-    initial begin
-        contador = 3'b000;
-        a = 1'b0; // Inicializa 'a'
+always @(posedge clk) begin
+    if (rst) begin
+        counter <= 2'b00;
+    end else begin
+        counter <= nxt_counter;
     end
+end
 
-    always @(posedge clk) begin
-        if (rst) begin
-            contador <= 3'b001; // Reset activo alto
-            a <= 1'b0; // Reinicia la salida
-        end else begin
-            contador <= prox_contador; // Actualiza contador con el próximo valor
-        end
-    end
-
-    always @(*) begin
-        // Lógica para determinar el próximo valor del contador
-        if (contador == 3'b100) begin
-            prox_contador = 3'b001; // Resetea el contador a 1 si llega a 4
-        end else begin
-            prox_contador = contador + 1; // Incrementa el contador
-        end
-        a = contador[2]; // Actualiza la salida 'a' para reflejar contador[2]
-    end
-
+always @(*)begin
+    nxt_counter = counter + 1;
+end
+assign scl = (counter[1]);
 endmodule
