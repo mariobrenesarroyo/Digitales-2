@@ -22,9 +22,14 @@ localparam IDLE          = 4'b0000;
 localparam START         = 4'b0001;
 localparam SLAVE_ADDRESS = 4'b0010;
 localparam ACK           = 4'b0011;
-localparam LECTURA       = 4'b0100;
-localparam ESCRITURA     = 4'b0101;
+localparam LECTURA_1     = 4'b0100;
+localparam ESCRITURA_1   = 4'b0101;
 localparam STOP          = 4'b0110;
+localparam ESCRITURA_2   = 4'b0111;
+localparam LECTURA_2     = 4'b1000;
+localparam WAITACK       = 4'b1001;
+localparam WAITACK_2     = 4'b1010;
+
 
 
 always @(posedge clk) begin
@@ -92,12 +97,73 @@ always @(*)begin
 
         ACK: begin
             if(contador_scl == 2'b10 && sda_in == 1'b0)begin
-                ProxEstado = STOP;                
+                prox_bit_counter = 4'd7;     //para cualquier tipo de transación el contador va a 7
+                if(i2c_direccion_rw[0])begin
+                    ProxEstado = LECTURA_1;
+                end
+                else begin
+                    ProxEstado = ESCRITURA_1;
+                end              
             end
             else begin
                 ProxEstado = ACK;
+                
             end
         end
+
+        ESCRITURA_1: begin
+            sda_oe = 1'b1;
+            if(contador_scl == 2'b10) begin
+                sda_out = wr_data[bit_counter + 8];  // Usas bit_counter que se actualiza secuencialmente
+                prox_bit_counter = bit_counter - 1;
+                if(bit_counter == 0) begin
+                    ProxEstado = WAITACK;
+                end else begin
+                    ProxEstado = ESCRITURA_1;
+                end
+            end else begin
+                ProxEstado = ESCRITURA_1;
+            end
+        end
+
+
+        WAITACK: begin
+            if(contador_scl == 2'b10) begin
+                if(rnw)begin
+                    sda_out = 1'b0;
+                    sda_oe  = 1'b1;
+                    ProxEstado = LECTURA_2;
+                end
+                else begin
+                    sda_oe = 1'b0;
+                    if(sda_in) begin
+                        ProxEstado = WAITACK;
+                    end
+                    else begin
+                        ProxEstado = ESCRITURA_2;
+                        prox_bit_counter = 4'd7;
+                    end
+                end
+            end
+            else ProxEstado = WAITACK;
+        end
+
+        ESCRITURA_2: begin
+            sda_oe = 1'b1;
+            if(contador_scl == 2'b10) begin
+                sda_out = wr_data[bit_counter];  // Usas bit_counter que se actualiza secuencialmente
+                prox_bit_counter = bit_counter - 1;
+                if(bit_counter == 0) begin
+                    ProxEstado = WAITACK_2;
+                end else begin
+                    ProxEstado = ESCRITURA_2;
+                end
+            end 
+            else begin
+                ProxEstado = ESCRITURA_2;
+            end
+        end
+
         
         STOP: begin
             sda_oe = 1'b1;
