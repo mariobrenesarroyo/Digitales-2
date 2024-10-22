@@ -44,9 +44,9 @@ module tb_i2c_transaction_generator;
         clk = 0;
         rst = 0;
         start_stb = 0;
-        rnw = 1;  // Leer
+        rnw = 1'b0;  // escribir
         i2c_addr = 7'd94;  // Dirección I2C
-        wr_data = 16'h0000;
+        wr_data = 16'hABC3;
         sda_in = 1'b0;  // Línea de datos en reposo
 
         // Reiniciar el sistema
@@ -58,7 +58,7 @@ module tb_i2c_transaction_generator;
         #10 start_stb = 0;
 
         // Esperar para observar el comportamiento
-        #500;
+        #1200;
 
         // Finalizar simulación
         $finish;

@@ -57,11 +57,8 @@ assign scl = (contador_scl[1]) || (EstPresente == IDLE) || (EstPresente == START
 always @(*)begin
     ProxEstado = EstPresente;
     prox_contador_scl = contador_scl + 1;
-
-
     case(EstPresente)
         IDLE: begin
-
             sda_out = 1'b1;
             sda_oe  = 1'b1;
             if(start_stb)begin
@@ -78,7 +75,6 @@ always @(*)begin
             ProxEstado = SLAVE_ADDRESS;
             prox_bit_counter = 4'd7;  // Uso de prox_bit_counter en lugar de bit_counter
         end
-
         SLAVE_ADDRESS: begin
             sda_oe = 1'b1;
             if(contador_scl == 2'b10) begin
@@ -93,16 +89,15 @@ always @(*)begin
                 ProxEstado = SLAVE_ADDRESS;
             end
         end
-
-
         ACK: begin
             if(contador_scl == 2'b10 && sda_in == 1'b0)begin
-                prox_bit_counter = 4'd7;     //para cualquier tipo de transación el contador va a 7
                 if(i2c_direccion_rw[0])begin
                     ProxEstado = LECTURA_1;
+                    prox_bit_counter = 4'd7;
                 end
                 else begin
                     ProxEstado = ESCRITURA_1;
+                    prox_bit_counter = 4'd15;
                 end              
             end
             else begin
@@ -110,13 +105,12 @@ always @(*)begin
                 
             end
         end
-
         ESCRITURA_1: begin
             sda_oe = 1'b1;
             if(contador_scl == 2'b10) begin
-                sda_out = wr_data[bit_counter + 8];  // Usas bit_counter que se actualiza secuencialmente
+                sda_out = wr_data[bit_counter];  // Usas bit_counter que se actualiza secuencialmente
                 prox_bit_counter = bit_counter - 1;
-                if(bit_counter == 0) begin
+                if(bit_counter == 8) begin
                     ProxEstado = WAITACK;
                 end else begin
                     ProxEstado = ESCRITURA_1;
@@ -125,8 +119,23 @@ always @(*)begin
                 ProxEstado = ESCRITURA_1;
             end
         end
+        LECTURA_1:begin
+            // Actualizar rd_data solo en flanco positivo de scl
+            if (contador_scl == 2'b10) begin
+                rd_data <= {rd_data[14:0], sda_in};
+                prox_bit_counter = bit_counter - 1;
+                if(bit_counter == 0) begin
+                    ProxEstado = WAITACK;
+                end else begin
+                    ProxEstado = LECTURA_1;
+                end
+            end else begin
+                ProxEstado = LECTURA_1;
+                
+                
 
-
+            end
+        end
         WAITACK: begin
             if(contador_scl == 2'b10) begin
                 if(rnw)begin
@@ -136,6 +145,7 @@ always @(*)begin
                 end
                 else begin
                     sda_oe = 1'b0;
+                    sda_out = 1'b0;
                     if(sda_in) begin
                         ProxEstado = WAITACK;
                     end
@@ -147,7 +157,6 @@ always @(*)begin
             end
             else ProxEstado = WAITACK;
         end
-
         ESCRITURA_2: begin
             sda_oe = 1'b1;
             if(contador_scl == 2'b10) begin
@@ -163,20 +172,42 @@ always @(*)begin
                 ProxEstado = ESCRITURA_2;
             end
         end
+        LECTURA_2:begin
+            // Actualizar rd_data solo en flanco positivo de scl
+            if (contador_scl == 2'b10) begin
+                rd_data <= {rd_data[14:0], sda_in};
+                prox_bit_counter = bit_counter - 1;
+                if(bit_counter == 0) begin
+                    ProxEstado = WAITACK;
+                end else begin
+                    ProxEstado = LECTURA_2;
+                end
+            end else begin
+                ProxEstado = LECTURA_2;
+            end
+        end
+        WAITACK_2: begin
+            if(contador_scl == 2'b10) begin
+                if(rnw)begin
+                    sda_out = 1'b0;
+                    ProxEstado = STOP;
 
-        
+                end
+                else begin
+                    sda_oe = 1'b1;
+                    if(sda_in) ProxEstado = WAITACK_2;
+                    else ProxEstado = STOP;
+                end
+            end
+            else begin
+                ProxEstado = WAITACK_2;
+            end
+        end    
         STOP: begin
             sda_oe = 1'b1;
             sda_out = 1'b0;
             ProxEstado = IDLE;
         end
-
-
-    
     endcase
-
 end
-
-
-
 endmodule
