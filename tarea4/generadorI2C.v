@@ -47,7 +47,7 @@ always @(posedge clk) begin
         bit_counter <= prox_bit_counter;
 
         // Actualizar rd data solo si flanco positvo de scl
-            if ((contador_scl == 2'b10) && (EstPresente == LECTURA_1 || EstPresente == LECTURA_2)) begin
+            if ((contador_scl == 2'b10) && !sda_oe && (EstPresente == LECTURA_1 || (EstPresente == LECTURA_2 && (7 >= bit_counter)))) begin
                 rd_data <= {rd_data[14:0], sda_in};
             end
     end
@@ -147,7 +147,7 @@ always @(*)begin
                     sda_out = 1'b0;
                     sda_oe  = 1'b1;
                     ProxEstado = LECTURA_2;
-                    prox_bit_counter = 4'd7;
+                    prox_bit_counter = 4'd8;
                 end
                 else begin
                     sda_oe = 1'b0;

@@ -34,6 +34,7 @@ always @(posedge clk) begin
         wr_data <= 16'd0;
         i2c_addr <= 7'd0;
         bit_counter <= 4'd6;
+        sda_in      <= 1'b0;
     end else begin
         EstPresente <= ProxEstado;
         bit_counter <= prox_bit_counter;
@@ -54,8 +55,6 @@ end
 always @(*) begin
     ProxEstado = EstPresente;
     prox_bit_counter = bit_counter;
-    sda_in = 1'b1;
-
     case (EstPresente)
         ESPERA: begin
             if(!sda_out && scl)begin
@@ -81,15 +80,16 @@ always @(*) begin
         DATA: begin
             if (posedge_scl) begin
                 if (sda_oe) begin
+                    sda_in = 1'b0;
                     prox_bit_counter = bit_counter - 1;
                     if (bit_counter == 8) begin
                         ProxEstado = WAITACK;
                     end
                 end else begin
                     // Receptor enviando datos (lectura)
-                    sda_in = rd_data[1 + bit_counter];
+                    sda_in = rd_data[bit_counter];
                     prox_bit_counter = bit_counter - 1;
-                    if (bit_counter == 0) begin
+                    if (bit_counter == 8) begin
                         ProxEstado = WAITACK;
                     end
                 end
@@ -97,18 +97,21 @@ always @(*) begin
         end
         WAITACK: begin
             if (posedge_scl) begin
-                prox_bit_counter = 4'd8;
                 if (sda_oe) begin
+                    sda_in = 1'b0;
                     if (sda_out) ProxEstado = WAITACK;
                     else ProxEstado = DATA_2;
+                    prox_bit_counter = 4'd8;
                 end else begin
                     ProxEstado = DATA_2;
+                    prox_bit_counter = 4'd7;
                 end
             end
         end
         DATA_2: begin
             if (posedge_scl) begin
                 if (sda_oe) begin
+                    sda_in = 1'b0;
                     prox_bit_counter = bit_counter - 1;
                     if (bit_counter == 0) begin
                         ProxEstado = WAITACK_2;
@@ -125,6 +128,7 @@ always @(*) begin
         WAITACK_2: begin
             if (posedge_scl) begin
                 if (sda_oe) begin
+                    sda_in = 1'b0;
                     if (sda_out) ProxEstado = WAITACK_2;
                     else ProxEstado = ESPERA;
                 end else begin
