@@ -1,108 +1,138 @@
-module receptor_i2c(
-    input wire clk,           // Reloj de entrada
-    input wire reset,         // Señal de reinicio
-    input wire [6:0] i2c_addr,// Dirección I2C del receptor
-    input wire scl,           // Entrada de reloj I2C
-    input wire sda_out,       // Entrada serial (SDA)
-    input wire sda_oe,        // Habilitación de salida de datos serial
-    output reg sda_in,        // Salida serial (SDA)
-    output reg [15:0] wr_data,// Datos recibidos
-    input wire [15:0] rd_data // Datos a enviar
+module i2c_transaction_receiver (
+    input wire clk,              // Señal de reloj de entrada desde el CPU
+    input wire rst,              // Entrada de reinicio
+    output reg [6:0] i2c_addr,   // Dirección del receptor de transacciones
+    input wire scl,              // Señal de reloj I2C
+    input wire sda_out,          // Entrada serial (datos)
+    input wire sda_oe,           // Habilitación de SDA_OUT (entrada)
+    output reg sda_in,           // Salida serial enviada desde el receptor
+    output reg [15:0] wr_data,   // Salida paralela (datos recibidos)
+    input wire [15:0] rd_data    // Entrada paralela (datos a enviar)
 );
 
-    // Estados del FSM
-    localparam IDLE = 3'b000, START = 3'b001, ADDR = 3'b010, DATA = 3'b011, ACK = 3'b100, STOP = 3'b101;
+reg [3:0] bit_counter, prox_bit_counter;
+reg [3:0] EstPresente, ProxEstado;
+reg scl_prev;  // Registro para almacenar el estado anterior de scl
 
-    // Variables internas
-    reg [2:0] estado, prox_estado;
-    reg [3:0] bit_count;
-    reg [7:0] data_buffer;
-    reg [6:0] addr_buffer;
-    reg rnw; // Bit de lectura/escritura
+// Estados
+localparam ESPERA        = 4'b0000;
+localparam SLAVE_ADDRESS = 4'b0010;
+localparam ACK           = 4'b0011;
+localparam DATA          = 4'b0100;
+localparam WAITACK       = 4'b0101;
+localparam DATA_2        = 4'b0110;
+localparam WAITACK_2     = 4'b0111;
 
-    // Inicialización de registros
-    initial begin
-        estado = IDLE;
-        prox_estado = IDLE;
-        bit_count = 0;
-        sda_in = 1;
-        wr_data = 0;
-        data_buffer = 0;
-        addr_buffer = 0;
-        rnw = 0;
-    end
+// Detectar flanco positivo de scl
+wire posedge_scl = scl && !scl_prev && rst;
+wire negedge_scl = !scl && scl_prev && rst;  // Detectar flanco negativo para sincronización
 
-    // Máquina de estados finita (FSM)
-    always @(posedge clk) begin
-        if (~reset) begin
-            estado <= IDLE;
-            bit_count <= 0;
-            sda_in <= 1;
-            wr_data <= 0;
-            data_buffer <= 0;
-            addr_buffer <= 0;
-            rnw <= 0;
-        end else begin
-            estado <= prox_estado;
+always @(posedge clk) begin
+    if (~rst) begin
+        EstPresente <= ESPERA;
+        scl_prev <= 1'b1;
+        wr_data <= 16'd0;
+        i2c_addr <= 7'd0;
+        bit_counter <= 4'd6;
+    end else begin
+        EstPresente <= ProxEstado;
+        bit_counter <= prox_bit_counter;
+        scl_prev <= scl;
+
+        // Actualizar wr_data en flanco positivo de scl y en estado de escritura
+        if (posedge_scl && sda_oe && ((EstPresente == DATA && (bit_counter >= 8)) || EstPresente == DATA_2 && (7 >= bit_counter) )) begin
+            wr_data <= {wr_data[14:0], sda_out};
+        end
+
+        // Actualizar i2c_addr en flanco positivo de scl mientras se recibe la dirección
+        if (posedge_scl && EstPresente == SLAVE_ADDRESS && sda_oe) begin
+            i2c_addr <= {i2c_addr[5:0], sda_out};
         end
     end
+end
 
-    always @(*) begin
-        prox_estado = estado;
-        case (estado)
-            IDLE: begin
-                if (sda_out == 0 && scl == 1) begin // Condición de START
-                    prox_estado <= START;
+always @(*) begin
+    ProxEstado = EstPresente;
+    prox_bit_counter = bit_counter;
+    sda_in = 1'b1;
+
+    case (EstPresente)
+        ESPERA: begin
+            if(!sda_out && scl)begin
+                ProxEstado = SLAVE_ADDRESS;
+                prox_bit_counter = 4'd7;
+            end
+        end
+        SLAVE_ADDRESS: begin
+            if (posedge_scl) begin
+                prox_bit_counter = bit_counter - 1;
+                if (bit_counter == 0) begin
+                    ProxEstado = ACK;
                 end
             end
-            START: begin
-                if (scl == 1) begin
-                    prox_estado <= ADDR;
-                    bit_count <= 0;
-                end
+        end
+        ACK: begin
+            if (posedge_scl) begin
+                sda_in = 1'b0;  // Acknowledge enviado por el receptor
+                ProxEstado = DATA;
+                prox_bit_counter = 4'd15;
             end
-            ADDR: begin
-                if (scl == 1) begin
-                    addr_buffer[6 - bit_count] <= sda_out;
-                    bit_count <= bit_count + 1;
-                    if (bit_count == 6) begin
-                        prox_estado <= DATA;
-                        bit_count <= 0;
-                        rnw <= sda_out; // Guardar el bit de lectura/escritura
-                        if (addr_buffer != i2c_addr) begin
-                            prox_estado <= IDLE; // Dirección incorrecta, volver a IDLE
-                        end
+        end
+        DATA: begin
+            if (posedge_scl) begin
+                if (sda_oe) begin
+                    prox_bit_counter = bit_counter - 1;
+                    if (bit_counter == 8) begin
+                        ProxEstado = WAITACK;
+                    end
+                end else begin
+                    // Receptor enviando datos (lectura)
+                    sda_in = rd_data[1 + bit_counter];
+                    prox_bit_counter = bit_counter - 1;
+                    if (bit_counter == 0) begin
+                        ProxEstado = WAITACK;
                     end
                 end
             end
-            DATA: begin
-                if (scl == 1) begin
-                    if (!rnw) begin
-                        // Escritura desde el maestro
-                        data_buffer[7 - bit_count] <= sda_out;
-                        bit_count <= bit_count + 1;
-                        if (bit_count == 7) begin
-                            wr_data <= {wr_data[7:0], data_buffer}; // Almacenar el byte recibido
-                            prox_estado <= ACK;
-                            bit_count <= 0;
-                        end
-                    end else begin
-                        // Lectura hacia el maestro (a implementar si es necesario)
+        end
+        WAITACK: begin
+            if (posedge_scl) begin
+                prox_bit_counter = 4'd8;
+                if (sda_oe) begin
+                    if (sda_out) ProxEstado = WAITACK;
+                    else ProxEstado = DATA_2;
+                end else begin
+                    ProxEstado = DATA_2;
+                end
+            end
+        end
+        DATA_2: begin
+            if (posedge_scl) begin
+                if (sda_oe) begin
+                    prox_bit_counter = bit_counter - 1;
+                    if (bit_counter == 0) begin
+                        ProxEstado = WAITACK_2;
+                    end
+                end else begin
+                    sda_in = rd_data[bit_counter];
+                    prox_bit_counter = bit_counter - 1;
+                    if (bit_counter == 0) begin
+                        ProxEstado = WAITACK_2;
                     end
                 end
             end
-            ACK: begin
-                if (scl == 1) begin
-                    sda_in <= 0; // Enviar ACK
-                    prox_estado <= STOP;
+        end
+        WAITACK_2: begin
+            if (posedge_scl) begin
+                if (sda_oe) begin
+                    if (sda_out) ProxEstado = WAITACK_2;
+                    else ProxEstado = ESPERA;
+                end else begin
+                    ProxEstado = ESPERA;
                 end
             end
-            STOP: begin
-                if (sda_out == 1 && scl == 1) begin // Condición de STOP
-                    prox_estado <= IDLE;
-                end
-            end
-        endcase
-    end
+        end
+    endcase
+end
 
 endmodule

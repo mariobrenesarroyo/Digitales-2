@@ -36,16 +36,20 @@ always @(posedge clk) begin
     if (~rst) begin
         contador_scl <= 2'b00;
         bit_counter  <= 4'b0000;
-        sda_out      <= 1'b0;
-        sda_oe       <= 1'b0;
+        sda_out      <= 1'b1;
+        sda_oe       <= 1'b1;
         EstPresente  <= IDLE;
+        rd_data      <= 16'd0;
         i2c_direccion_rw <= {i2c_addr,rnw};
     end else begin
         contador_scl <= prox_contador_scl;
         EstPresente <= ProxEstado;
         bit_counter <= prox_bit_counter;
-        
 
+        // Actualizar rd data solo si flanco positvo de scl
+            if ((contador_scl == 2'b10) && (EstPresente == LECTURA_1 || EstPresente == LECTURA_2)) begin
+                rd_data <= {rd_data[14:0], sda_in};
+            end
     end
 end
 
@@ -81,6 +85,7 @@ always @(*)begin
                 sda_out = i2c_direccion_rw[bit_counter];  // Usas bit_counter que se actualiza secuencialmente
                 prox_bit_counter = bit_counter - 1;
                 if(bit_counter == 0) begin
+                    sda_oe = 1'b0;
                     ProxEstado = ACK;
                 end else begin
                     ProxEstado = SLAVE_ADDRESS;
@@ -90,14 +95,14 @@ always @(*)begin
             end
         end
         ACK: begin
+            sda_oe = 1'b0;
+            prox_bit_counter = 4'd15;
             if(contador_scl == 2'b10 && sda_in == 1'b0)begin
                 if(i2c_direccion_rw[0])begin
                     ProxEstado = LECTURA_1;
-                    prox_bit_counter = 4'd7;
                 end
                 else begin
                     ProxEstado = ESCRITURA_1;
-                    prox_bit_counter = 4'd15;
                 end              
             end
             else begin
@@ -120,11 +125,11 @@ always @(*)begin
             end
         end
         LECTURA_1:begin
+            sda_oe = 1'b0;
             // Actualizar rd_data solo en flanco positivo de scl
             if (contador_scl == 2'b10) begin
-                rd_data <= {rd_data[14:0], sda_in};
                 prox_bit_counter = bit_counter - 1;
-                if(bit_counter == 0) begin
+                if(bit_counter == 8) begin
                     ProxEstado = WAITACK;
                 end else begin
                     ProxEstado = LECTURA_1;
@@ -142,6 +147,7 @@ always @(*)begin
                     sda_out = 1'b0;
                     sda_oe  = 1'b1;
                     ProxEstado = LECTURA_2;
+                    prox_bit_counter = 4'd7;
                 end
                 else begin
                     sda_oe = 1'b0;
@@ -173,12 +179,12 @@ always @(*)begin
             end
         end
         LECTURA_2:begin
+            sda_oe = 1'b0;
             // Actualizar rd_data solo en flanco positivo de scl
             if (contador_scl == 2'b10) begin
-                rd_data <= {rd_data[14:0], sda_in};
                 prox_bit_counter = bit_counter - 1;
                 if(bit_counter == 0) begin
-                    ProxEstado = WAITACK;
+                    ProxEstado = WAITACK_2;
                 end else begin
                     ProxEstado = LECTURA_2;
                 end
@@ -190,11 +196,12 @@ always @(*)begin
             if(contador_scl == 2'b10) begin
                 if(rnw)begin
                     sda_out = 1'b0;
+                    sda_oe = 1'b1;
                     ProxEstado = STOP;
 
                 end
                 else begin
-                    sda_oe = 1'b1;
+                    sda_oe = 1'b0;
                     if(sda_in) ProxEstado = WAITACK_2;
                     else ProxEstado = STOP;
                 end
