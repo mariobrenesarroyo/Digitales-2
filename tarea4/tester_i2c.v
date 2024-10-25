@@ -22,8 +22,8 @@ module tester_i2c(
         clk = 0;
         rst = 0;
         start_stb = 0;
-        rnw = 1'b1;  // escribir es 0 y leer es 1
-        i2c_addr_g = 7'd94;  // Dirección I2C
+        rnw = 1'b0;  // escribir es 0 y leer es 1
+        i2c_addr_g = 7'd94;  // Dirección I2C debido al numero de carnet C11194
         wr_data_g = 16'hABC3;
         rd_data_r = 16'h54AC;  // Establecer el valor de rd_data del receptor
 
