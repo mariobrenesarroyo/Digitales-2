@@ -12,9 +12,9 @@ module i2c_transaction_generator (
     output reg [15:0] rd_data   // Datos leídos
 );
 
-reg [1:0] contador_scl, prox_contador_scl ;
-reg [3:0] bit_counter, prox_bit_counter ;
-reg [7:0] i2c_direccion_rw ;
+reg [1:0] contador_scl, prox_contador_scl ; //manejo de 1/4 de frecuencia de relo
+reg [3:0] bit_counter, prox_bit_counter ;   // registros para manejos de bits tanto sda out como sda in
+reg [7:0] i2c_direccion_rw ;                // dirección mas bit de rnw
 reg [3:0] EstPresente, ProxEstado;
 
 //estados
@@ -62,7 +62,7 @@ always @(*)begin
     ProxEstado = EstPresente;
     prox_contador_scl = contador_scl + 1;
     case(EstPresente)
-        IDLE: begin
+        IDLE: begin //estado de espera al stb 
             sda_out = 1'b1;
             sda_oe  = 1'b1;
             if(start_stb)begin
@@ -73,13 +73,13 @@ always @(*)begin
 
             end
         end
-        START: begin
+        START: begin  //manejo de condición de start bajando sda out mientras scl está en alto
             sda_out = 1'b0;
             sda_oe  = 1'b1;
             ProxEstado = SLAVE_ADDRESS;
             prox_bit_counter = 4'd7;  // Uso de prox_bit_counter en lugar de bit_counter
         end
-        SLAVE_ADDRESS: begin
+        SLAVE_ADDRESS: begin   // escritura de los bits de la dirección y el rnw
             sda_oe = 1'b1;
             if(contador_scl == 2'b10) begin
                 sda_out = i2c_direccion_rw[bit_counter];  // Usas bit_counter que se actualiza secuencialmente
@@ -94,10 +94,10 @@ always @(*)begin
                 ProxEstado = SLAVE_ADDRESS;
             end
         end
-        ACK: begin
+        ACK: begin //espera de ACK  por pare de sda in 
             sda_oe = 1'b0;
             prox_bit_counter = 4'd15;
-            if(contador_scl == 2'b10 && sda_in == 1'b0)begin
+            if(contador_scl == 2'b10 && sda_in == 1'b0)begin //se pone como contador_scl 10 porque es el momento que se da el flanco positivo de scl
                 if(i2c_direccion_rw[0])begin
                     ProxEstado = LECTURA_1;
                 end
@@ -142,15 +142,15 @@ always @(*)begin
             end
         end
         WAITACK: begin
-            if(contador_scl == 2'b10) begin
+            if(contador_scl == 2'b10) begin  //esperando segundo ACK por parte de sda in o out si fuera el caso de que el receptor o generador tienen el control 
                 if(rnw)begin
-                    sda_out = 1'b0;
-                    sda_oe  = 1'b1;
+                    sda_out = 1'b0;  
+                    sda_oe  = 1'b1;  //receptor tiene control
                     ProxEstado = LECTURA_2;
                     prox_bit_counter = 4'd8;
                 end
                 else begin
-                    sda_oe = 1'b0;
+                    sda_oe = 1'b0;  //generador tiene control
                     sda_out = 1'b0;
                     if(sda_in) begin
                         ProxEstado = WAITACK;
@@ -163,7 +163,7 @@ always @(*)begin
             end
             else ProxEstado = WAITACK;
         end
-        ESCRITURA_2: begin
+        ESCRITURA_2: begin //enviadndo los otros 8 bit de escritura 
             sda_oe = 1'b1;
             if(contador_scl == 2'b10) begin
                 sda_out = wr_data[bit_counter];  // Usas bit_counter que se actualiza secuencialmente
@@ -178,7 +178,7 @@ always @(*)begin
                 ProxEstado = ESCRITURA_2;
             end
         end
-        LECTURA_2:begin
+        LECTURA_2:begin  //recibiendo los ultimos 8 bits de lectura 
             sda_oe = 1'b0;
             // Actualizar rd_data solo en flanco positivo de scl
             if (contador_scl == 2'b10) begin
@@ -195,13 +195,13 @@ always @(*)begin
         WAITACK_2: begin
             if(contador_scl == 2'b10) begin
                 if(rnw)begin
-                    sda_out = 1'b0;
-                    sda_oe = 1'b1;
+                    sda_out = 1'b0; 
+                    sda_oe = 1'b1;   //generador tiene control
                     ProxEstado = STOP;
 
                 end
                 else begin
-                    sda_oe = 1'b0;
+                    sda_oe = 1'b0;   //receptor tiene control
                     if(sda_in) ProxEstado = WAITACK_2;
                     else ProxEstado = STOP;
                 end
@@ -210,7 +210,7 @@ always @(*)begin
                 ProxEstado = WAITACK_2;
             end
         end    
-        STOP: begin
+        STOP: begin //condición de parada  
             sda_oe = 1'b1;
             sda_out = 1'b0;
             ProxEstado = IDLE;

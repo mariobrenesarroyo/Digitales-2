@@ -56,13 +56,13 @@ always @(*) begin
     ProxEstado = EstPresente;
     prox_bit_counter = bit_counter;
     case (EstPresente)
-        ESPERA: begin
+        ESPERA: begin  //espera hasta detectar condición de start
             if(!sda_out && scl)begin
                 ProxEstado = SLAVE_ADDRESS;
                 prox_bit_counter = 4'd7;
             end
         end
-        SLAVE_ADDRESS: begin
+        SLAVE_ADDRESS: begin // recibiendo bit para la direción de addr
             if (posedge_scl) begin
                 prox_bit_counter = bit_counter - 1;
                 if (bit_counter == 0) begin
@@ -77,7 +77,7 @@ always @(*) begin
                 prox_bit_counter = 4'd15;
             end
         end
-        DATA: begin
+        DATA: begin  //enviando o recibiendo datos dependiendo de de quien tenga control de sda oe
             if (posedge_scl) begin
                 if (sda_oe) begin
                     sda_in = 1'b0;
@@ -95,7 +95,7 @@ always @(*) begin
                 end
             end
         end
-        WAITACK: begin
+        WAITACK: begin // esperando o recibiendo datos de receptor
             if (posedge_scl) begin
                 if (sda_oe) begin
                     sda_in = 1'b0;
@@ -108,7 +108,7 @@ always @(*) begin
                 end
             end
         end
-        DATA_2: begin
+        DATA_2: begin // esperando o recibiendo ultimos datos de receptor
             if (posedge_scl) begin
                 if (sda_oe) begin
                     sda_in = 1'b0;
@@ -125,7 +125,7 @@ always @(*) begin
                 end
             end
         end
-        WAITACK_2: begin
+        WAITACK_2: begin //enviando o recibiendo ack del generador o receptor
             if (posedge_scl) begin
                 if (sda_oe) begin
                     sda_in = 1'b0;
