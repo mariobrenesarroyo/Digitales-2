@@ -1,0 +1,1391 @@
+$date
+	Mon Oct 28 15:54:11 2024
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1s
+$end
+$scope module tb_i2c_transaction $end
+$var wire 16 ! wr_data_r [15:0] $end
+$var wire 16 " wr_data_g [15:0] $end
+$var wire 1 # start_stb $end
+$var wire 1 $ sda_out $end
+$var wire 1 % sda_oe $end
+$var wire 1 & sda_in $end
+$var wire 1 ' scl $end
+$var wire 1 ( rst $end
+$var wire 1 ) rnw $end
+$var wire 16 * rd_data_r [15:0] $end
+$var wire 16 + rd_data_g [15:0] $end
+$var wire 7 , i2c_addr_r [6:0] $end
+$var wire 7 - i2c_addr_g [6:0] $end
+$var wire 1 . clk $end
+$scope module generator $end
+$var wire 1 ' scl $end
+$var wire 16 / wr_data [15:0] $end
+$var wire 1 # start_stb $end
+$var wire 1 & sda_in $end
+$var wire 1 ( rst $end
+$var wire 1 ) rnw $end
+$var wire 7 0 i2c_addr [6:0] $end
+$var wire 1 . clk $end
+$var parameter 4 1 ACK $end
+$var parameter 4 2 ESCRITURA_1 $end
+$var parameter 4 3 ESCRITURA_2 $end
+$var parameter 4 4 IDLE $end
+$var parameter 4 5 LECTURA_1 $end
+$var parameter 4 6 LECTURA_2 $end
+$var parameter 4 7 SLAVE_ADDRESS $end
+$var parameter 4 8 START $end
+$var parameter 4 9 STOP $end
+$var parameter 4 : WAITACK $end
+$var parameter 4 ; WAITACK_2 $end
+$var reg 4 < EstPresente [3:0] $end
+$var reg 4 = ProxEstado [3:0] $end
+$var reg 4 > bit_counter [3:0] $end
+$var reg 2 ? contador_scl [1:0] $end
+$var reg 8 @ i2c_direccion_rw [7:0] $end
+$var reg 4 A prox_bit_counter [3:0] $end
+$var reg 2 B prox_contador_scl [1:0] $end
+$var reg 16 C rd_data [15:0] $end
+$var reg 1 % sda_oe $end
+$var reg 1 $ sda_out $end
+$upscope $end
+$scope module receiver $end
+$var wire 1 D negedge_scl $end
+$var wire 1 E posedge_scl $end
+$var wire 1 ' scl $end
+$var wire 1 % sda_oe $end
+$var wire 1 $ sda_out $end
+$var wire 1 ( rst $end
+$var wire 16 F rd_data [15:0] $end
+$var wire 1 . clk $end
+$var parameter 4 G ACK $end
+$var parameter 4 H DATA $end
+$var parameter 4 I DATA_2 $end
+$var parameter 4 J ESPERA $end
+$var parameter 4 K SLAVE_ADDRESS $end
+$var parameter 4 L WAITACK $end
+$var parameter 4 M WAITACK_2 $end
+$var reg 4 N EstPresente [3:0] $end
+$var reg 4 O ProxEstado [3:0] $end
+$var reg 4 P bit_counter [3:0] $end
+$var reg 7 Q i2c_addr [6:0] $end
+$var reg 4 R prox_bit_counter [3:0] $end
+$var reg 1 S scl_prev $end
+$var reg 1 & sda_in $end
+$var reg 16 T wr_data [15:0] $end
+$upscope $end
+$scope module tester $end
+$var wire 16 U rd_data_g [15:0] $end
+$var wire 1 ' scl $end
+$var wire 1 & sda_in $end
+$var wire 1 % sda_oe $end
+$var wire 1 $ sda_out $end
+$var reg 1 . clk $end
+$var reg 7 V i2c_addr_g [6:0] $end
+$var reg 16 W rd_data_r [15:0] $end
+$var reg 1 ) rnw $end
+$var reg 1 ( rst $end
+$var reg 1 # start_stb $end
+$var reg 16 X wr_data_g [15:0] $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+$comment Show the parameter values. $end
+$dumpall
+b111 M
+b101 L
+b10 K
+b0 J
+b110 I
+b100 H
+b11 G
+b1010 ;
+b1001 :
+b110 9
+b1 8
+b10 7
+b1000 6
+b100 5
+b0 4
+b111 3
+b101 2
+b11 1
+$end
+#0
+$dumpvars
+b1010101111000011 X
+b101010010101100 W
+b1011110 V
+bx U
+bx T
+xS
+bx R
+bx Q
+bx P
+bx O
+bx N
+b101010010101100 F
+0E
+0D
+bx C
+bx B
+bx A
+bx @
+bx ?
+bx >
+bx =
+bx <
+b1011110 0
+b1010101111000011 /
+0.
+b1011110 -
+bx ,
+bx +
+b101010010101100 *
+0)
+0(
+x'
+x&
+x%
+x$
+0#
+b1010101111000011 "
+bx !
+$end
+#5
+1'
+b1 B
+b0 =
+b110 R
+b0 O
+b10111100 @
+b0 +
+b0 C
+b0 U
+b0 <
+1%
+1$
+b0 >
+b0 ?
+0&
+b110 P
+b0 ,
+b0 Q
+b0 !
+b0 T
+1S
+b0 N
+1.
+#10
+0.
+#15
+1.
+#20
+0.
+#25
+1.
+#30
+0.
+1(
+#35
+b10 B
+bx >
+b1 ?
+1.
+#40
+0.
+#45
+b11 B
+b10 ?
+1.
+#50
+0.
+#55
+b0 B
+b11 ?
+1.
+#60
+b1 =
+0.
+1#
+#65
+b111 R
+b10 O
+b111 A
+b10 =
+0$
+b1 B
+b1 <
+b0 ?
+1.
+#70
+b10 =
+0.
+0#
+#75
+1D
+0'
+b10 B
+b111 P
+b10 N
+b111 >
+b10 <
+b1 ?
+1.
+#80
+0.
+#85
+b110 R
+1E
+1'
+0D
+b110 A
+1$
+b11 B
+b10 ?
+0S
+1.
+#90
+0.
+#95
+0E
+b110 R
+b0 B
+b1 ,
+b1 Q
+1S
+b110 P
+b110 >
+b11 ?
+1.
+#100
+0.
+#105
+1D
+0'
+b1 B
+b0 ?
+1.
+#110
+0.
+#115
+0D
+b10 B
+0S
+b1 ?
+1.
+#120
+0.
+#125
+b101 R
+1E
+1'
+b101 A
+0$
+b11 B
+b10 ?
+1.
+#130
+0.
+#135
+0E
+b101 R
+b0 B
+b10 ,
+b10 Q
+1S
+b101 P
+b101 >
+b11 ?
+1.
+#140
+0.
+#145
+1D
+0'
+b1 B
+b0 ?
+1.
+#150
+0.
+#155
+0D
+b10 B
+0S
+b1 ?
+1.
+#160
+0.
+#165
+b100 R
+1E
+1'
+b100 A
+1$
+b11 B
+b10 ?
+1.
+#170
+0.
+#175
+0E
+b100 R
+b0 B
+b101 ,
+b101 Q
+1S
+b100 P
+b100 >
+b11 ?
+1.
+#180
+0.
+#185
+1D
+0'
+b1 B
+b0 ?
+1.
+#190
+0.
+#195
+0D
+b10 B
+0S
+b1 ?
+1.
+#200
+0.
+#205
+b11 R
+1E
+1'
+b11 A
+b11 B
+b10 ?
+1.
+#210
+0.
+#215
+0E
+b11 R
+b0 B
+b1011 ,
+b1011 Q
+1S
+b11 P
+b11 >
+b11 ?
+1.
+#220
+0.
+#225
+1D
+0'
+b1 B
+b0 ?
+1.
+#230
+0.
+#235
+0D
+b10 B
+0S
+b1 ?
+1.
+#240
+0.
+#245
+b10 R
+1E
+1'
+b10 A
+b11 B
+b10 ?
+1.
+#250
+0.
+#255
+0E
+b10 R
+b0 B
+b10111 ,
+b10111 Q
+1S
+b10 P
+b10 >
+b11 ?
+1.
+#260
+0.
+#265
+1D
+0'
+b1 B
+b0 ?
+1.
+#270
+0.
+#275
+0D
+b10 B
+0S
+b1 ?
+1.
+#280
+0.
+#285
+b1 R
+1E
+1'
+b1 A
+b11 B
+b10 ?
+1.
+#290
+0.
+#295
+0E
+b1 R
+b0 B
+b101111 ,
+b101111 Q
+1S
+b1 P
+b1 >
+b11 ?
+1.
+#300
+0.
+#305
+1D
+0'
+b1 B
+b0 ?
+1.
+#310
+0.
+#315
+0D
+b10 B
+0S
+b1 ?
+1.
+#320
+0.
+#325
+b0 R
+1E
+1'
+b0 A
+0$
+b11 B
+b10 ?
+1.
+#330
+0.
+#335
+0E
+b10 O
+b0 R
+b0 B
+b1011110 ,
+b1011110 Q
+1S
+b0 P
+b0 >
+b11 ?
+1.
+#340
+0.
+#345
+1D
+0'
+b1 B
+b0 ?
+1.
+#350
+0.
+#355
+0D
+b10 B
+0S
+b1 ?
+1.
+#360
+0.
+#365
+b11 O
+b1111 R
+1E
+1'
+b11 =
+0%
+b1111 A
+b11 B
+b10 ?
+1.
+#370
+0.
+#375
+0E
+b11 O
+b0 B
+1S
+b1111 P
+b11 N
+b1111 >
+b11 <
+b11 ?
+1.
+#380
+0.
+#385
+1D
+0'
+b1 B
+b0 ?
+1.
+#390
+0.
+#395
+0D
+b10 B
+0S
+b1 ?
+1.
+#400
+0.
+#405
+b100 O
+1E
+1'
+b101 =
+b11 B
+b10 ?
+1.
+#410
+0.
+#415
+0E
+b1111 R
+1%
+b0 B
+1S
+b100 N
+b101 <
+b11 ?
+1.
+#420
+0.
+#425
+1D
+0'
+b1 B
+b0 ?
+1.
+#430
+0.
+#435
+0D
+b10 B
+0S
+b1 ?
+1.
+#440
+0.
+#445
+b1110 R
+1E
+1'
+b1110 A
+1$
+b11 B
+b10 ?
+1.
+#450
+0.
+#455
+0E
+b1110 R
+b0 B
+b1 !
+b1 T
+1S
+b1110 P
+b1110 >
+b11 ?
+1.
+#460
+0.
+#465
+1D
+0'
+b1 B
+b0 ?
+1.
+#470
+0.
+#475
+0D
+b10 B
+0S
+b1 ?
+1.
+#480
+0.
+#485
+b1101 R
+1E
+1'
+b1101 A
+0$
+b11 B
+b10 ?
+1.
+#490
+0.
+#495
+0E
+b1101 R
+b0 B
+b10 !
+b10 T
+1S
+b1101 P
+b1101 >
+b11 ?
+1.
+#500
+0.
+#505
+1D
+0'
+b1 B
+b0 ?
+1.
+#510
+0.
+#515
+0D
+b10 B
+0S
+b1 ?
+1.
+#520
+0.
+#525
+b1100 R
+1E
+1'
+b1100 A
+1$
+b11 B
+b10 ?
+1.
+#530
+0.
+#535
+0E
+b1100 R
+b0 B
+b101 !
+b101 T
+1S
+b1100 P
+b1100 >
+b11 ?
+1.
+#540
+0.
+#545
+1D
+0'
+b1 B
+b0 ?
+1.
+#550
+0.
+#555
+0D
+b10 B
+0S
+b1 ?
+1.
+#560
+0.
+#565
+b1011 R
+1E
+1'
+b1011 A
+0$
+b11 B
+b10 ?
+1.
+#570
+0.
+#575
+0E
+b1011 R
+b0 B
+b1010 !
+b1010 T
+1S
+b1011 P
+b1011 >
+b11 ?
+1.
+#580
+0.
+#585
+1D
+0'
+b1 B
+b0 ?
+1.
+#590
+0.
+#595
+0D
+b10 B
+0S
+b1 ?
+1.
+#600
+0.
+#605
+b1010 R
+1E
+1'
+b1010 A
+1$
+b11 B
+b10 ?
+1.
+#610
+0.
+#615
+0E
+b1010 R
+b0 B
+b10101 !
+b10101 T
+1S
+b1010 P
+b1010 >
+b11 ?
+1.
+#620
+0.
+#625
+1D
+0'
+b1 B
+b0 ?
+1.
+#630
+0.
+#635
+0D
+b10 B
+0S
+b1 ?
+1.
+#640
+0.
+#645
+b1001 R
+1E
+1'
+b1001 A
+0$
+b11 B
+b10 ?
+1.
+#650
+0.
+#655
+0E
+b1001 R
+b0 B
+b101010 !
+b101010 T
+1S
+b1001 P
+b1001 >
+b11 ?
+1.
+#660
+0.
+#665
+1D
+0'
+b1 B
+b0 ?
+1.
+#670
+0.
+#675
+0D
+b10 B
+0S
+b1 ?
+1.
+#680
+0.
+#685
+b1000 R
+1E
+1'
+b1000 A
+1$
+b11 B
+b10 ?
+1.
+#690
+0.
+#695
+0E
+b100 O
+b1000 R
+b0 B
+b1010101 !
+b1010101 T
+1S
+b1000 P
+b1000 >
+b11 ?
+1.
+#700
+0.
+#705
+1D
+0'
+b1 B
+b0 ?
+1.
+#710
+0.
+#715
+0D
+b10 B
+0S
+b1 ?
+1.
+#720
+0.
+#725
+b101 O
+b111 R
+1E
+1'
+b1001 =
+b111 A
+b11 B
+b10 ?
+1.
+#730
+0.
+#735
+0E
+b111 R
+b0 B
+b10101011 !
+b10101011 T
+1S
+b111 P
+b101 N
+b111 >
+b1001 <
+b11 ?
+1.
+#740
+0.
+#745
+1D
+0'
+b1 B
+b0 ?
+1.
+#750
+0.
+#755
+0D
+b10 B
+0S
+b1 ?
+1.
+#760
+0.
+#765
+b110 O
+1E
+1'
+b111 =
+0$
+0%
+b11 B
+b10 ?
+1.
+#770
+0.
+#775
+0E
+b111 R
+1%
+b0 B
+1S
+b110 N
+b111 <
+b11 ?
+1.
+#780
+0.
+#785
+1D
+0'
+b1 B
+b0 ?
+1.
+#790
+0.
+#795
+0D
+b10 B
+0S
+b1 ?
+1.
+#800
+0.
+#805
+b110 R
+1E
+1'
+b110 A
+1$
+b11 B
+b10 ?
+1.
+#810
+0.
+#815
+0E
+b110 R
+b0 B
+b101010111 !
+b101010111 T
+1S
+b110 P
+b110 >
+b11 ?
+1.
+#820
+0.
+#825
+1D
+0'
+b1 B
+b0 ?
+1.
+#830
+0.
+#835
+0D
+b10 B
+0S
+b1 ?
+1.
+#840
+0.
+#845
+b101 R
+1E
+1'
+b101 A
+b11 B
+b10 ?
+1.
+#850
+0.
+#855
+0E
+b101 R
+b0 B
+b1010101111 !
+b1010101111 T
+1S
+b101 P
+b101 >
+b11 ?
+1.
+#860
+0.
+#865
+1D
+0'
+b1 B
+b0 ?
+1.
+#870
+0.
+#875
+0D
+b10 B
+0S
+b1 ?
+1.
+#880
+0.
+#885
+b100 R
+1E
+1'
+b100 A
+0$
+b11 B
+b10 ?
+1.
+#890
+0.
+#895
+0E
+b100 R
+b0 B
+b10101011110 !
+b10101011110 T
+1S
+b100 P
+b100 >
+b11 ?
+1.
+#900
+0.
+#905
+1D
+0'
+b1 B
+b0 ?
+1.
+#910
+0.
+#915
+0D
+b10 B
+0S
+b1 ?
+1.
+#920
+0.
+#925
+b11 R
+1E
+1'
+b11 A
+b11 B
+b10 ?
+1.
+#930
+0.
+#935
+0E
+b11 R
+b0 B
+b101010111100 !
+b101010111100 T
+1S
+b11 P
+b11 >
+b11 ?
+1.
+#940
+0.
+#945
+1D
+0'
+b1 B
+b0 ?
+1.
+#950
+0.
+#955
+0D
+b10 B
+0S
+b1 ?
+1.
+#960
+0.
+#965
+b10 R
+1E
+1'
+b10 A
+b11 B
+b10 ?
+1.
+#970
+0.
+#975
+0E
+b10 R
+b0 B
+b1010101111000 !
+b1010101111000 T
+1S
+b10 P
+b10 >
+b11 ?
+1.
+#980
+0.
+#985
+1D
+0'
+b1 B
+b0 ?
+1.
+#990
+0.
+#995
+0D
+b10 B
+0S
+b1 ?
+1.
+#1000
+0.
+#1005
+b1 R
+1E
+1'
+b1 A
+b11 B
+b10 ?
+1.
+#1010
+0.
+#1015
+0E
+b1 R
+b0 B
+b10101011110000 !
+b10101011110000 T
+1S
+b1 P
+b1 >
+b11 ?
+1.
+#1020
+0.
+#1025
+1D
+0'
+b1 B
+b0 ?
+1.
+#1030
+0.
+#1035
+0D
+b10 B
+0S
+b1 ?
+1.
+#1040
+0.
+#1045
+b0 R
+1E
+1'
+b0 A
+1$
+b11 B
+b10 ?
+1.
+#1050
+0.
+#1055
+0E
+b110 O
+b0 R
+b0 B
+b101010111100001 !
+b101010111100001 T
+1S
+b0 P
+b0 >
+b11 ?
+1.
+#1060
+0.
+#1065
+1D
+0'
+b1 B
+b0 ?
+1.
+#1070
+0.
+#1075
+0D
+b10 B
+0S
+b1 ?
+1.
+#1080
+0.
+#1085
+b111 O
+b1111 R
+1E
+1'
+b1010 =
+b1111 A
+b11 B
+b10 ?
+1.
+#1090
+0.
+#1095
+0E
+b0 B
+b1010101111000011 !
+b1010101111000011 T
+1S
+b1111 P
+b111 N
+b1111 >
+b1010 <
+b11 ?
+1.
+#1100
+0.
+#1105
+1D
+0'
+b1 B
+b0 ?
+1.
+#1110
+0.
+#1115
+0D
+b10 B
+0S
+b1 ?
+1.
+#1120
+0.
+#1125
+b0 O
+1E
+1'
+b110 =
+0%
+b11 B
+b10 ?
+1.
+#1130
+0.
+#1135
+0E
+b111 R
+b10 O
+b0 =
+0$
+1%
+b0 B
+1S
+b0 N
+b110 <
+b11 ?
+1.
+#1140
+0.
+#1145
+1$
+b1 B
+b0 <
+b0 ?
+b111 P
+b10 N
+1.
+#1150
+0.
+#1155
+b10 B
+b1 ?
+1.
+#1160
+0.
+#1165
+b11 B
+b10 ?
+1.
+#1170
+0.
+#1175
+b0 B
+b11 ?
+1.
+#1180
+0.
+#1185
+b1 B
+b0 ?
+1.
+#1190
+0.
+#1195
+b10 B
+b1 ?
+1.
+#1200
+0.
+#1205
+b11 B
+b10 ?
+1.
+#1210
+0.
+#1215
+b0 B
+b11 ?
+1.
+#1220
+0.
+#1225
+b1 B
+b0 ?
+1.
+#1230
+0.
+#1235
+b10 B
+b1 ?
+1.
+#1240
+0.
+#1245
+b11 B
+b10 ?
+1.
+#1250
+0.
+#1255
+b0 B
+b11 ?
+1.
+#1260
+0.
+#1265
+b1 B
+b0 ?
+1.
+#1270
+0.
