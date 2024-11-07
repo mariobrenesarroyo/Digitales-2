@@ -15,7 +15,7 @@ reg [7:0] data_shift_reg;      // Registro para desplazar datos de entrada
 reg [1:0] contador_sck, prox_contador_sck;
 reg SCK_prev;
 reg [2:0] EstPresente, ProxEstado;
-reg [2:0] bit_counter, prox_bit_counter;
+reg [3:0] bit_counter, prox_bit_counter;
 
 localparam IDLE = 3'b000;
 localparam DATA = 3'b001;
@@ -35,6 +35,17 @@ always @(posedge CLK) begin
         SCK_prev     <= SCK;
         EstPresente  <= ProxEstado;
         bit_counter  <= prox_bit_counter;
+
+        if (flanco_dezplazamiento && EstPresente == DATA)begin
+            data_shift_reg[0] <= MISO;
+            data_shift_reg[1] <= data_shift_reg[0];
+            data_shift_reg[2] <= data_shift_reg[1];
+            data_shift_reg[3] <= data_shift_reg[2];
+            data_shift_reg[4] <= data_shift_reg[3];
+            data_shift_reg[5] <= data_shift_reg[4];
+            data_shift_reg[6] <= data_shift_reg[5];
+            data_shift_reg[7] <= data_shift_reg[6];
+        end
 
 
     end
@@ -60,7 +71,7 @@ always @(*) begin
         IDLE: begin
             CS = 1'b1;
             ProxEstado = DATA;
-            prox_bit_counter = 3'd7;
+            prox_bit_counter = 4'd8;
             data_shift_reg <= data_in;  // Cargar el valor de data_in al registro de desplazamiento
         end
         DATA: begin
