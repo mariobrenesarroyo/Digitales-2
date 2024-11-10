@@ -18,8 +18,10 @@ assign flanco_muestreo = ((CPH == 1'b0 && CKP == 1'b0) || (CPH == 1'b0 && CKP ==
 assign flanco_dezplazamiento = ((CPH == 1'b0 && CKP == 1'b0) || (CPH == 1'b0 && CKP == 1'b1)) ? negedge_sck : posedge_sck;
 
 always @(posedge flanco_dezplazamiento && !SS) begin
+    if(!flanco_muestreo)begin
     data_shift_reg <= {data_shift_reg[6:0], MOSI};
     data_out <= data_shift_reg;
+    end
 end
 
 always @(posedge flanco_muestreo && !SS)begin

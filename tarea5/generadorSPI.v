@@ -28,7 +28,6 @@ always @(posedge CLK) begin
         CS           <= 1'b1;
         EstPresente  <= IDLE;
         data_shift_reg <= data_in;  // Cargar el valor de data_in al registro de desplazamiento
-        data_out <= 8'b0;           // Resetear data_out al inicio
         bit_counter <= 0;
     end else begin
         contador_sck <= prox_contador_sck;
@@ -39,28 +38,7 @@ always @(posedge CLK) begin
     end
 end
 
-always @(posedge flanco_dezplazamiento) begin
-    if (EstPresente == DATA)begin
-            prox_bit_counter = bit_counter - 1;
-            data_shift_reg[0] <= MISO;
-            data_shift_reg[1] <= data_shift_reg[0];
-            data_shift_reg[2] <= data_shift_reg[1];
-            data_shift_reg[3] <= data_shift_reg[2];
-            data_shift_reg[4] <= data_shift_reg[3];
-            data_shift_reg[5] <= data_shift_reg[4];
-            data_shift_reg[6] <= data_shift_reg[5];
-            data_shift_reg[7] <= data_shift_reg[6];
-
-            if (bit_counter == 0)begin
-                    data_out <= data_shift_reg;
-                end
-        end
-end
-
-always @(posedge flanco_muestreo)begin
-    MOSI = data_shift_reg[7];
-end
-
+//manejo de reloj de sck
 always @(*) begin
     prox_contador_sck = contador_sck + 1;
 end
@@ -74,40 +52,58 @@ assign flanco_muestreo = ((CPH == 1'b0 && CKP == 1'b0) || (CPH == 1'b0 && CKP ==
 assign flanco_dezplazamiento = ((CPH == 1'b0 && CKP == 1'b0) || (CPH == 1'b0 && CKP == 1'b1)) ? negedge_sck : posedge_sck;
 
 always @(*) begin
+    // Valor por defecto de CS
+    CS = 1'b1;
+
     ProxEstado = EstPresente;
     prox_bit_counter = bit_counter;
 
     case (EstPresente)
         IDLE: begin
-            CS = 1'b1;
+            // Mantener CS como 1'b1 en el estado IDLE
             ProxEstado = DATA;
-            prox_bit_counter = 4'd8;
+            prox_bit_counter = 4'd7;
             data_shift_reg <= data_in;  // Cargar el valor de data_in al registro de desplazamiento
             MOSI = 0;
         end
         DATA: begin
+            // Cambiar CS a 1'b0 en el estado DATA
             CS = 1'b0;
-            if(bit_counter == 0)begin
-                    CS = 1'b1;
-                end
-            
-            if (flanco_muestreo) begin
-                ProxEstado = DATA;
-                
-            end else if (flanco_dezplazamiento) begin
-
-                if (bit_counter == 0) begin
-                    ProxEstado = IDLE;
-                    CS = 1'b1;
-                end else begin
-                    ProxEstado = DATA;
-                end
+            if (bit_counter == 0 && flanco_dezplazamiento) begin
+                ProxEstado = IDLE;
             end else begin
                 ProxEstado = DATA;
             end
+        end
+        default: begin
+            // Asegurarse de que CS sea 1'b1 por defecto
+            CS = 1'b1;
+        end
+    endcase
 end
 
-    endcase
+
+always @(posedge flanco_dezplazamiento) begin
+    if (EstPresente == DATA)begin
+            bit_counter  <= prox_bit_counter;
+            prox_bit_counter = bit_counter - 1;
+            data_shift_reg[0] <= MISO;
+            data_shift_reg[1] <= data_shift_reg[0];
+            data_shift_reg[2] <= data_shift_reg[1];
+            data_shift_reg[3] <= data_shift_reg[2];
+            data_shift_reg[4] <= data_shift_reg[3];
+            data_shift_reg[5] <= data_shift_reg[4];
+            data_shift_reg[6] <= data_shift_reg[5];
+            data_shift_reg[7] <= data_shift_reg[6];
+    end
+
+            if (bit_counter == 7)begin
+                    data_out <= data_shift_reg;
+            end
+end
+
+always @(posedge flanco_muestreo && EstPresente == DATA)begin
+    MOSI = data_shift_reg[7];
 end
 
 endmodule
