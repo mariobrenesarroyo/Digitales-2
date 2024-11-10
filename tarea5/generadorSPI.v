@@ -36,7 +36,11 @@ always @(posedge CLK) begin
         EstPresente  <= ProxEstado;
         bit_counter  <= prox_bit_counter;
 
-        if (flanco_dezplazamiento && EstPresente == DATA)begin
+    end
+end
+
+always @(posedge flanco_dezplazamiento) begin
+    if (EstPresente == DATA)begin
             data_shift_reg[0] <= MISO;
             data_shift_reg[1] <= data_shift_reg[0];
             data_shift_reg[2] <= data_shift_reg[1];
@@ -46,9 +50,6 @@ always @(posedge CLK) begin
             data_shift_reg[6] <= data_shift_reg[5];
             data_shift_reg[7] <= data_shift_reg[6];
         end
-
-
-    end
 end
 
 always @(*) begin
@@ -73,24 +74,33 @@ always @(*) begin
             ProxEstado = DATA;
             prox_bit_counter = 4'd8;
             data_shift_reg <= data_in;  // Cargar el valor de data_in al registro de desplazamiento
+            MOSI = 0;
         end
         DATA: begin
-    CS = 1'b0;
-    
-    if (flanco_muestreo) begin
-        MOSI = data_shift_reg[7];
-        ProxEstado = DATA;
-        
-    end else if (flanco_dezplazamiento) begin
-        prox_bit_counter = bit_counter - 1;
-        if (bit_counter == 0) begin
-            ProxEstado = IDLE;
-        end else begin
-            ProxEstado = DATA;
-        end
-    end else begin
-        ProxEstado = DATA;
-    end
+            CS = 1'b0;
+            if(bit_counter == 0)begin
+                    CS = 1'b1;
+                    MOSI = 1'b0;
+                end
+            
+            if (flanco_muestreo) begin
+                MOSI = data_shift_reg[7];
+                ProxEstado = DATA;
+
+            end else if (flanco_dezplazamiento) begin
+                prox_bit_counter = bit_counter - 1;
+                if (bit_counter == 8)begin
+                    data_out <= data_shift_reg;
+                end
+                if (bit_counter == 0) begin
+                    ProxEstado = IDLE;
+                    CS = 1'b1;
+                end else begin
+                    ProxEstado = DATA;
+                end
+            end else begin
+                ProxEstado = DATA;
+            end
 end
 
     endcase
