@@ -41,6 +41,7 @@ end
 
 always @(posedge flanco_dezplazamiento) begin
     if (EstPresente == DATA)begin
+            prox_bit_counter = bit_counter - 1;
             data_shift_reg[0] <= MISO;
             data_shift_reg[1] <= data_shift_reg[0];
             data_shift_reg[2] <= data_shift_reg[1];
@@ -49,7 +50,15 @@ always @(posedge flanco_dezplazamiento) begin
             data_shift_reg[5] <= data_shift_reg[4];
             data_shift_reg[6] <= data_shift_reg[5];
             data_shift_reg[7] <= data_shift_reg[6];
+
+            if (bit_counter == 0)begin
+                    data_out <= data_shift_reg;
+                end
         end
+end
+
+always @(posedge flanco_muestreo)begin
+    MOSI = data_shift_reg[7];
 end
 
 always @(*) begin
@@ -80,18 +89,13 @@ always @(*) begin
             CS = 1'b0;
             if(bit_counter == 0)begin
                     CS = 1'b1;
-                    MOSI = 1'b0;
                 end
             
             if (flanco_muestreo) begin
-                MOSI = data_shift_reg[7];
                 ProxEstado = DATA;
-
+                
             end else if (flanco_dezplazamiento) begin
-                prox_bit_counter = bit_counter - 1;
-                if (bit_counter == 8)begin
-                    data_out <= data_shift_reg;
-                end
+
                 if (bit_counter == 0) begin
                     ProxEstado = IDLE;
                     CS = 1'b1;
